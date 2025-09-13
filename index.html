@@ -1,364 +1,223 @@
-<!--
-MIT License
-
-Copyright (c) 2025 Alwin
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
--->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ROS Cycle — gentle period companion</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap');
-    :root{
-      --bg1:#FFF0F5; --bg2:#F0FFF0; --pink:#FF6B9D; --soft:#FFB6C1; --mint:#98D8C8; --text:#3b3b3b; --muted:#8A8A8A;
-      --card:#ffffff; --shadow:0 6px 24px rgba(0,0,0,0.08);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{font-family:'Nunito',system-ui,-apple-system,Segoe UI,Roboto; margin:0; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,var(--bg1),var(--bg2)); color:var(--text); padding:20px}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌸 ROS Cycle - Period Tracker</title>
+    <style>
+        /* ========== Fonts & Reset ========== */
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap');
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Nunito',sans-serif; background: linear-gradient(135deg, #FFF0F5, #F0FFF0); color:#4A4A4A; min-height:100vh; display:flex; justify-content:center; align-items:center; }
 
-    .app{width:100%; max-width:760px; background:var(--card); border-radius:18px; box-shadow:var(--shadow); padding:20px;}
-    header{display:flex;align-items:center;gap:16px}
-    .logo{font-size:28px; font-weight:800; background:linear-gradient(45deg,var(--pink),var(--soft)); -webkit-background-clip:text; color:transparent}
-    .lead{color:var(--muted); font-weight:300}
+        /* ========== Container ========== */
+        .container { width:100%; max-width:500px; padding:20px; background:#fff; border-radius:25px; box-shadow:0 4px 20px rgba(0,0,0,0.1); text-align:center; }
 
-    main{margin-top:14px}
-    .step{display:none; opacity:0; transform:translateY(12px); transition:all .28s ease}
-    .step.active{display:block; opacity:1; transform:translateY(0)}
+        /* ========== Logo & Titles ========== */
+        .logo { font-size:2.5em; font-weight:700; background: linear-gradient(45deg,#FF6B9D,#FFB6C1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:10px; animation:bounce 2s infinite; }
+        @keyframes bounce { 0%,20%,50%,80%,100% { transform:translateY(0); } 40%{ transform:translateY(-10px); } 60%{ transform:translateY(-5px); } }
+        .subtitle { font-weight:300; color:#8A8A8A; margin-bottom:20px; }
+        .user-greeting { font-size:1.3em; margin-bottom:20px; color:#FF6B9D; }
 
-    .card{background:linear-gradient(180deg, #fff, #fff); border-radius:12px; padding:18px; box-shadow:0 4px 18px rgba(0,0,0,0.04);}
+        /* ========== Inputs ========== */
+        .input-group { margin-bottom:20px; text-align:left; }
+        .input-label { display:block; margin-bottom:8px; font-weight:600; }
+        .input-field { width:100%; padding:12px 15px; border:2px solid #FFB6C1; border-radius:15px; font-size:16px; outline:none; transition:all 0.3s ease; }
+        .input-field:focus { border-color:#FF6B9D; box-shadow:0 0 15px rgba(255,107,157,0.2); }
 
-    .field{margin-bottom:12px; text-align:left}
-    label{display:block; font-weight:600; margin-bottom:6px}
-    input[type=text], input[type=date], input[type=number]{width:100%; padding:12px 14px; border-radius:10px; border:1.5px solid #f2dce4; background:#fff; outline:none}
-    input:focus{box-shadow:0 6px 20px rgba(255,107,157,0.12); border-color:var(--pink)}
+        /* ========== Buttons ========== */
+        .btn { background: linear-gradient(45deg,#FF6B9D,#FFB6C1); color:#fff; border:none; padding:12px 30px; border-radius:25px; font-weight:600; cursor:pointer; transition:all 0.3s ease; margin:5px; }
+        .btn:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(0,0,0,0.15); }
+        .btn-secondary { background:#E6E6FA; color:#4A4A4A; }
 
-    .controls{display:flex; gap:10px; justify-content:flex-end; margin-top:10px}
-    button{cursor:pointer; border:0; padding:10px 16px; border-radius:12px; font-weight:700}
-    .btn-primary{background:linear-gradient(45deg,var(--pink),var(--soft)); color:white}
-    .btn-ghost{background:transparent; color:var(--text)}
+        /* ========== Calendar ========== */
+        .calendar { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; margin:20px 0; }
+        .calendar-day { padding:10px; border-radius:12px; background:#fff; border:1px solid #f0f0f0; cursor:pointer; transition:all 0.3s ease; position:relative; text-align:center; }
+        .calendar-day:hover { transform:scale(1.1); box-shadow:0 4px 20px rgba(0,0,0,0.1); }
+        .calendar-day.period { background:#FF6B9D; color:#fff; animation:pulse 2s infinite; }
+        .calendar-day.fertile { background:#98D8C8; color:#4A4A4A; }
+        .calendar-day.other-month { background:#f9f9f9; color:#ccc; }
+        @keyframes pulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.05); } }
 
-    /* calendar */
-    .month-nav{display:flex; align-items:center; justify-content:space-between; margin:18px 0}
-    .month-title{font-weight:800; font-size:18px}
-    .grid{display:grid; grid-template-columns:repeat(7,1fr); gap:8px}
-    .cell{background:#fff; border-radius:10px; padding:10px; min-height:56px; display:flex; align-items:flex-start; justify-content:center; flex-direction:column; border:1px solid #f4f4f4; position:relative}
-    .cell.other{background:#fafafa; color:#bbb}
-    .daynum{font-weight:700}
-    .badge{position:absolute; right:8px; top:8px; font-size:11px; padding:4px 6px; border-radius:8px}
-    .period{background:linear-gradient(45deg,var(--pink),#ff9bbf); color:#fff}
-    .fertile{background:linear-gradient(45deg,var(--mint),#dff6ee); color:var(--text)}
+        .month-navigation { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+        .month-title { font-size:1.8em; font-weight:700; }
+        .nav-btn { background:#FFB6C1; border:none; border-radius:50%; padding:10px; cursor:pointer; }
+        .nav-btn:hover { background:#FF6B9D; transform:scale(1.1); }
 
-    .legend{display:flex; gap:12px; margin-top:10px; align-items:center}
-    .legend .box{width:14px; height:14px; border-radius:4px}
+        .legend { display:flex; justify-content:center; gap:20px; margin-bottom:15px; }
+        .legend-item { display:flex; align-items:center; gap:8px; font-size:0.9em; }
+        .legend-color { width:16px; height:16px; border-radius:4px; }
 
-    /* tooltip */
-    .tooltip{position:absolute; bottom:100%; left:50%; transform:translateX(-50%); background:#fff; border-radius:10px; padding:8px 10px; box-shadow:0 6px 20px rgba(0,0,0,0.12); white-space:nowrap; font-size:13px; color:var(--text); display:none}
-    .cell:hover .tooltip, .cell:focus-within .tooltip{display:block}
+        /* ========== Modal ========== */
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; padding:20px; }
+        .modal.active { display:flex; }
+        .modal-content { background:#fff; padding:25px; border-radius:20px; max-width:400px; width:100%; position:relative; transform:scale(0.7); transition:transform 0.3s ease; }
+        .modal.active .modal-content { transform:scale(1); }
+        .close-btn { position:absolute; top:10px; right:15px; background:none; border:none; font-size:24px; cursor:pointer; color:#8A8A8A; }
 
-    /* modal */
-    .modal{position:fixed; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.45); display:flex; justify-content:center; align-items:center; z-index:60; display:none}
-    .modal.active{display:flex}
-    .modal .box{background:white; padding:18px; border-radius:12px; max-width:420px; box-shadow:0 10px 40px rgba(0,0,0,0.18)}
-
-    footer{margin-top:16px; font-size:13px; color:var(--muted)}
-
-    @media (max-width:600px){ .grid{gap:6px} .cell{min-height:64px} header{gap:10px}}
-  </style>
+        @media(max-width:480px){ .month-title{font-size:1.4em;} .btn{padding:10px 20px;} }
+    </style>
 </head>
 <body>
-  <div class="app" role="application" aria-label="ROS Cycle period tracker">
-    <header>
-      <div class="logo">🌸 ROS Cycle</div>
-      <div>
-        <div class="lead">Gentle, private & student-friendly</div>
-        <div style="font-size:12px;color:var(--muted)">No data stored. Local only for this demo.</div>
-      </div>
-    </header>
-
-    <main>
-      <!-- Step 1: basic info -->
-      <section class="step active" id="step-1">
-        <div class="card">
-          <h3 style="margin:0 0 8px">Hello — let's make this simple ✨</h3>
-          <p style="margin:0 0 12px;color:var(--muted)">We will ask just a few friendly questions. You can go back anytime.</p>
-
-          <div class="field">
-            <label for="name">Name</label>
-            <input id="name" type="text" placeholder="How should I call you?" autocomplete="name" aria-label="Name" />
-          </div>
-
-          <div class="field">
-            <label for="dob">Date of birth <span style="font-weight:400;color:var(--muted);font-size:13px">(used only for age guidance)</span></label>
-            <input id="dob" type="date" aria-label="Date of birth" />
-            <div style="font-size:12px;color:var(--muted);margin-top:6px">If you prefer, you can enter your age instead.</div>
-          </div>
-
-          <div class="controls">
-            <button class="btn-ghost" onclick="skipInfo()">Skip</button>
-            <button class="btn-primary" onclick="nextToStep2()" id="step1-next">Continue</button>
-          </div>
+    <div class="container">
+        <!-- Welcome Screen -->
+        <div class="screen active" id="welcome-screen">
+            <div class="logo">🌸 ROS Cycle</div>
+            <p class="subtitle">Your cute period companion 💕</p>
+            <div class="input-group">
+                <label class="input-label" for="user-name">What's your name, beautiful? ✨</label>
+                <input type="text" id="user-name" class="input-field" placeholder="Enter your name">
+            </div>
+            <div class="input-group">
+                <label class="input-label" for="user-age">Your age 🌹</label>
+                <input type="number" id="user-age" class="input-field" placeholder="Enter your age" min="12" max="55">
+            </div>
+            <button class="btn" onclick="goToDateInput()">Let's Get Started! 🦄</button>
         </div>
-      </section>
 
-      <!-- Step 2: period details -->
-      <section class="step" id="step-2">
-        <div class="card">
-          <h3 style="margin:0 0 8px">Period details</h3>
-          <p style="margin:0 0 12px;color:var(--muted)">Just one last step — this is used to create friendly estimates.</p>
-
-          <div class="field">
-            <label for="last">When did your last period start?</label>
-            <input id="last" type="date" aria-label="Last period date" />
-          </div>
-
-          <div class="field">
-            <label for="cycle">Average cycle length (days)</label>
-            <input id="cycle" type="number" min="21" max="35" value="28" aria-label="Cycle length" />
-          </div>
-
-          <div class="controls">
-            <button class="btn-ghost" onclick="showStep(1)">← Back</button>
-            <button class="btn-primary" onclick="createCalendar()">Create my calendar</button>
-          </div>
+        <!-- Date Input Screen -->
+        <div class="screen" id="date-input-screen">
+            <div class="logo">📅 Period Details</div>
+            <div class="user-greeting" id="user-greeting"></div>
+            <div class="input-group">
+                <label class="input-label" for="last-period">When was your last period? 🌹</label>
+                <input type="date" id="last-period" class="input-field">
+            </div>
+            <div class="input-group">
+                <label class="input-label" for="cycle-length">Cycle length (days) 🔄</label>
+                <input type="number" id="cycle-length" class="input-field" value="28" min="21" max="35">
+            </div>
+            <button class="btn" onclick="calculateCycle()">Create My Calendar! ✨</button>
+            <button class="btn btn-secondary" onclick="goBack('welcome-screen')">← Back</button>
         </div>
-      </section>
 
-      <!-- Step 3: calendar -->
-      <section class="step" id="step-3">
-        <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:center">
+        <!-- Calendar Screen -->
+        <div class="screen calendar-screen" id="calendar-screen">
+            <div class="user-greeting" id="calendar-greeting"></div>
+            <div class="month-navigation">
+                <button class="nav-btn" onclick="previousMonth()">←</button>
+                <h2 class="month-title" id="current-month"></h2>
+                <button class="nav-btn" onclick="nextMonth()">→</button>
+            </div>
+            <div class="calendar-header">
+                <div class="day-header">Sun</div>
+                <div class="day-header">Mon</div>
+                <div class="day-header">Tue</div>
+                <div class="day-header">Wed</div>
+                <div class="day-header">Thu</div>
+                <div class="day-header">Fri</div>
+                <div class="day-header">Sat</div>
+            </div>
+            <div class="calendar" id="calendar"></div>
+            <div class="legend">
+                <div class="legend-item"><div class="legend-color" style="background:#FF6B9D;"></div>Period Days 🌹</div>
+                <div class="legend-item"><div class="legend-color" style="background:#98D8C8;"></div>Fertile Window 🌱</div>
+            </div>
             <div>
-              <div id="greeting" style="font-weight:800"></div>
-              <div style="font-size:13px;color:var(--muted)" id="age-note"></div>
+                <button class="btn" onclick="goToDateInput()">Update Period Info 📝</button>
+                <button class="btn btn-secondary" onclick="startOver()">Start Over 🔄</button>
             </div>
-            <div style="text-align:right">
-              <div style="font-size:12px;color:var(--muted)">Predicted months: <span id="pred-count">0</span></div>
-              <div style="font-size:12px;color:var(--muted)">Visible: <span id="visible-month"></span></div>
-            </div>
-          </div>
-
-          <div class="month-nav">
-            <button class="btn-ghost" aria-label="previous month" id="prevBtn">←</button>
-            <div class="month-title" id="monthTitle">Month</div>
-            <button class="btn-ghost" aria-label="next month" id="nextBtn">→</button>
-          </div>
-
-          <div class="grid" id="calendarGrid" role="grid" aria-label="Calendar grid">
-            <!-- cells injected here -->
-          </div>
-
-          <div class="legend">
-            <div style="display:flex;align-items:center;gap:8px"><div class="box" style="background:linear-gradient(45deg,var(--pink),#ff9bbf);width:14px;height:14px;border-radius:4px"></div> Period</div>
-            <div style="display:flex;align-items:center;gap:8px"><div class="box" style="background:linear-gradient(45deg,var(--mint),#dff6ee);width:14px;height:14px;border-radius:4px"></div> Fertile</div>
-          </div>
-
-          <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
-            <button class="btn-ghost" onclick="showStep(2)">Update</button>
-            <button class="btn-primary" onclick="resetAll()">Start Over</button>
-          </div>
+            <p style="font-size:0.8em; margin-top:15px; color:#888;">⚠️ Disclaimer: Predictions are estimates. Not medically approved. Still a student project, many improvements pending. 🌸</p>
         </div>
-
-        <p style="margin-top:8px;font-size:13px;color:var(--muted)">⚠️ This is a student-built prototype for education. Not medically approved. Predictions are estimates. Use as guidance only.</p>
-      </section>
-
-    </main>
-
-    <footer style="display:flex;justify-content:space-between;align-items:center;margin-top:14px">
-      <div style="font-size:12px;color:var(--muted)">Open-source • MIT License</div>
-      <div style="font-size:12px;color:var(--muted)">Made for students • Privacy-first</div>
-    </footer>
-  </div>
-
-  <!-- modal for warnings/details -->
-  <div class="modal" id="modal" role="dialog" aria-modal="true">
-    <div class="box">
-      <div id="modalText"></div>
-      <div style="text-align:right;margin-top:12px"><button class="btn-primary" onclick="closeModal()">OK</button></div>
     </div>
-  </div>
 
-  <script>
-    // --- state ---
-    let state = {
-      name:'', dob:null, age:null, last:null, cycle:28, periodLen:5, months:[], visibleIndex:0
-    };
+    <script>
+        // ================== VARIABLES ==================
+        let userName = '';
+        let userAge = 0;
+        let lastPeriod = null;
+        let cycleLength = 28;
+        let periodLength = 5;
+        let calendarData = [];
+        let currentMonthIndex = 0;
+        let months = [];
 
-    // helpers
-    const el = id => document.getElementById(id);
-    function showStep(n){ document.querySelectorAll('.step').forEach(s=>s.classList.remove('active')); el('step-'+n).classList.add('active'); }
+        const screens = document.querySelectorAll('.screen');
 
-    function skipInfo(){ state.name=''; state.dob=null; state.age=null; showStep(2); }
-
-    function nextToStep2(){
-      const name = el('name').value.trim();
-      const dob = el('dob').value;
-      if(name==='') return showModal('Please enter your name — a short nickname is fine.');
-      state.name = name;
-      if(dob){
-        const parsed = new Date(dob);
-        if(isNaN(parsed)) return showModal('Invalid date of birth.');
-        const age = calculateAge(parsed);
-        if(age < 9 || age > 55) return showModal('Age appears out of expected range (9–55). If correct, proceed; otherwise check your input.');
-        state.dob = parsed; state.age = age;
-      }
-      showStep(2);
-      setTimeout(()=> el('last').focus(),200);
-    }
-
-    function calculateAge(dob){ const diff = Date.now() - dob.getTime(); return Math.floor(diff / (1000*60*60*24*365.25)); }
-
-    // create calendar
-    function createCalendar(){
-      const lastVal = el('last').value;
-      const cycleVal = parseInt(el('cycle').value,10);
-      if(!lastVal) return showModal('Please select your last period start date.');
-      if(isNaN(cycleVal) || cycleVal <21 || cycleVal >35) return showModal('Cycle length should be between 21 and 35 days.');
-
-      const last = new Date(lastVal);
-      if(last > new Date()) return showModal('Last period date cannot be in the future.');
-
-      state.last = new Date(last.getFullYear(), last.getMonth(), last.getDate());
-      state.cycle = cycleVal;
-      generatePredictions(12); // 12 months
-      state.visibleIndex = 0;
-      renderMonth(state.visibleIndex);
-      showStep(3);
-    }
-
-    function generatePredictions(monthCount){
-      state.months = [];
-      const start = new Date(state.last.getFullYear(), state.last.getMonth(), 1);
-      const oneDay = 24*60*60*1000;
-      for(let m=0;m<monthCount;m++){
-        const mm = new Date(start.getFullYear(), start.getMonth()+m, 1);
-        const days = new Date(mm.getFullYear(), mm.getMonth()+1, 0).getDate();
-        const monthObj = {month:mm.getMonth(), year:mm.getFullYear(), days:[]};
-        for(let d=1; d<=days; d++){
-          const date = new Date(mm.getFullYear(), mm.getMonth(), d);
-          const diffDays = Math.round((date - state.last)/oneDay);
-          let type = 'normal';
-          if(diffDays >= 0){
-            const mod = ((diffDays % state.cycle) + state.cycle) % state.cycle; // safe mod
-            // period: days 0..periodLen-1
-            if(mod < state.periodLen) type = 'period';
-            // ovulation approx at cycle-14 -> fertile window last 6 days ending at ovulation
-            const ovulationIndex = state.cycle - 14;
-            const fertileStart = ovulationIndex - 5; // inclusive
-            if(mod >= fertileStart && mod <= ovulationIndex) type = (type==='period') ? 'period' : 'fertile';
-          }
-          monthObj.days.push({date, type});
+        // ================== SCREEN FUNCTIONS ==================
+        function goToDateInput(){
+            const nameInput = document.getElementById('user-name').value.trim();
+            const ageInput = parseInt(document.getElementById('user-age').value);
+            if(nameInput === '' || isNaN(ageInput) || ageInput < 12 || ageInput > 55){
+                alert('Please enter valid name and age between 12-55 🌹');
+                return;
+            }
+            userName = nameInput;
+            userAge = ageInput;
+            document.getElementById('user-greeting').innerText = `Hi ${userName}, let's track your periods! 🌸`;
+            showScreen('date-input-screen');
         }
-        state.months.push(monthObj);
-      }
-    }
 
-    function renderMonth(index){
-      if(index < 0 || index >= state.months.length) return showModal('No prediction available for this month. We only predict the next '+state.months.length+' months.');
-      const monthObj = state.months[index];
-      el('monthTitle').innerText = `${getMonthName(monthObj.month)} ${monthObj.year}`;
-      el('pred-count').innerText = state.months.length;
-      el('visible-month').innerText = `${index+1}/${state.months.length}`;
-      el('greeting').innerText = `Hi ${state.name || 'there'} — your calendar:`;
-      el('age-note').innerText = state.age ? `Age: ${state.age}` : '';
+        function calculateCycle(){
+            const dateInput = document.getElementById('last-period').value;
+            const cycleInput = parseInt(document.getElementById('cycle-length').value);
 
-      const grid = el('calendarGrid'); grid.innerHTML = '';
+            if(!dateInput){ alert('Please select a valid date 🌹'); return; }
+            if(isNaN(cycleInput) || cycleInput < 21 || cycleInput > 35){ alert('Cycle length should be 21-35 days'); return; }
 
-      // add weekday headers
-      const weekdays = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-      // we will render a full grid starting from the 1st week's sunday
-      const firstDay = new Date(monthObj.year, monthObj.month, 1);
-      const startOffset = firstDay.getDay();
-      const daysInMonth = monthObj.days.length;
-      const totalCells = Math.ceil((startOffset + daysInMonth)/7)*7;
+            lastPeriod = new Date(dateInput);
+            cycleLength = cycleInput;
 
-      for(let i=0;i<totalCells;i++){
-        const cell = document.createElement('div'); cell.className='cell'; cell.tabIndex = 0;
-        const dayIndex = i - startOffset + 1;
-        if(dayIndex < 1 || dayIndex > daysInMonth){ cell.classList.add('other'); cell.innerHTML = '<div style="opacity:.4">-</div>'; grid.appendChild(cell); continue; }
-        const dayObj = monthObj.days[dayIndex-1];
-        const node = document.createElement('div'); node.className='daynum'; node.innerText = dayObj.date.getDate();
-        cell.appendChild(node);
-        // badge and classes
-        if(dayObj.type === 'period'){ const b=document.createElement('div'); b.className='badge period'; b.innerText='Period'; cell.classList.add('period'); cell.appendChild(b); }
-        else if(dayObj.type === 'fertile'){ const b=document.createElement('div'); b.className='badge fertile'; b.innerText='Fertile'; cell.classList.add('fertile'); cell.appendChild(b); }
+            generateCalendarData();
+            currentMonthIndex = 0;
+            showCalendarMonth(currentMonthIndex);
+            showScreen('calendar-screen');
+        }
 
-        // tooltip
-        const tip = document.createElement('div'); tip.className='tooltip';
-        if(dayObj.type==='period') tip.innerText = 'Estimated period day — self-care: cotton pads, warmth, hydration.';
-        else if(dayObj.type==='fertile') tip.innerText = 'Fertile window — higher chance of conception. Take care, stay hydrated.';
-        else tip.innerText = 'Regular day — maintain routine and hydration.';
-        cell.appendChild(tip);
+        function goBack(screenId){
+            showScreen(screenId);
+        }
 
-        // click/focus to show details modal
-        cell.addEventListener('click', ()=> showDayModal(dayObj));
-        cell.addEventListener('keydown', (e)=> { if(e.key==='Enter' || e.key===' ') showDayModal(dayObj); });
+        function startOver(){
+            if(confirm('Are you sure you want to start over? 🌸')){ location.reload(); }
+        }
 
-        grid.appendChild(cell);
-      }
-    }
+        function showScreen(screenId){
+            screens.forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
 
-    function previous(){ if(state.visibleIndex>0){ state.visibleIndex--; renderMonth(state.visibleIndex);} else showModal('You are at the first predicted month.'); }
-    function next(){ if(state.visibleIndex < state.months.length-1){ state.visibleIndex++; renderMonth(state.visibleIndex);} else showModal('No further predictions. We only predict the next '+state.months.length+' months.'); }
+        // ================== CALENDAR LOGIC ==================
+        function generateCalendarData(){
+            calendarData = [];
+            months = [];
+            let date = new Date(lastPeriod);
+            for(let i=0;i<12;i++){ // 12 months prediction
+                let monthObj = {month:date.getMonth(), year:date.getFullYear(), days:[]};
+                let daysInMonth = new Date(date.getFullYear(), date.getMonth()+1,0).getDate();
+                for(let d=1;d<=daysInMonth;d++){
+                    const dayObj = {date:new Date(date.getFullYear(),date.getMonth(),d), type:'normal'};
+                    const diffDays = Math.floor((dayObj.date - lastPeriod)/(1000*60*60*24));
+                    if(diffDays>=0){
+                        if(diffDays % cycleLength < periodLength){ dayObj.type='period'; }
+                        else if(diffDays % cycleLength >= periodLength && diffDays % cycleLength <= periodLength+5){ dayObj.type='fertile'; }
+                    }
+                    monthObj.days.push(dayObj);
+                }
+                months.push(monthObj);
+                date.setMonth(date.getMonth()+1);
+            }
+        }
 
-    // small modal for details
-    function showDayModal(dayObj){
-      const txt = [];
-      const dd = dayObj.date.toLocaleDateString();
-      txt.push(`<strong>${dd}</strong>`);
-      if(dayObj.type==='period') txt.push('<p>Estimated flow: Heavy → Medium → Light across the days. Tips: use cotton pads, heat pack, hydrate.</p>');
-      if(dayObj.type==='fertile') txt.push('<p>Fertile window day. If trying for pregnancy or avoiding it, consider additional tracking.</p>');
-      txt.push('<p style="font-size:12px;color:var(--muted)">Note: predictions are estimates; consult healthcare for medical questions.</p>');
-      el('modalText').innerHTML = txt.join(''); el('modal').classList.add('active');
-    }
-    function closeModal(){ el('modal').classList.remove('active'); }
-    function showModal(msg){ el('modalText').innerText = msg; el('modal').classList.add('active'); }
+        function showCalendarMonth(index){
+            if(index<0 || index>=months.length){ alert('No data for this month 🌸'); return; }
+            const monthObj = months[index];
+            document.getElementById('current-month').innerText = `${monthObj.month+1}/${monthObj.year}`;
+            const calendarEl = document.getElementById('calendar');
+            calendarEl.innerHTML = '';
+            monthObj.days.forEach(d=>{
+                const div = document.createElement('div');
+                div.classList.add('calendar-day');
+                div.innerText = d.date.getDate();
+                if(d.type==='period'){ div.classList.add('period'); }
+                else if(d.type==='fertile'){ div.classList.add('fertile'); }
+                calendarEl.appendChild(div);
+            });
+            document.getElementById('calendar-greeting').innerText = `Hi ${userName}, here is your period calendar 🌸`;
+        }
 
-    function resetAll(){ if(confirm('Start over? This will clear the current session.')){ state = {name:'', dob:null, age:null, last:null, cycle:28, periodLen:5, months:[], visibleIndex:0}; document.querySelectorAll('input').forEach(i=>i.value=''); showStep(1); }}
-
-    function getMonthName(i){ return ['January','February','March','April','May','June','July','August','September','October','November','December'][i]; }
-
-    // keyboard & binding
-    document.getElementById('prevBtn').addEventListener('click', previous);
-    document.getElementById('nextBtn').addEventListener('click', next);
-    // support arrow keys on calendar screen
-    document.addEventListener('keydown', (e)=>{
-      if(document.querySelector('#step-3.active')){
-        if(e.key==='ArrowLeft') previous();
-        if(e.key==='ArrowRight') next();
-      }
-    });
-
-    // set max date for DOB and last date
-    (function setMaxDates(){ const today = new Date().toISOString().split('T')[0]; const dobMax = new Date(); dobMax.setFullYear(dobMax.getFullYear()-9); // at least 9y old
-      el('dob').setAttribute('max', new Date().toISOString().split('T')[0]); el('last').setAttribute('max', today);
-    })();
-
-    // accessibility: focus first field on step change
-    const observer = new MutationObserver(()=>{
-      const active = document.querySelector('.step.active'); if(active){ const input = active.querySelector('input'); if(input) input.focus(); }
-    }); observer.observe(document.querySelector('main'),{childList:true,subtree:true});
-  </script>
+        function previousMonth(){ showCalendarMonth(--currentMonthIndex); }
+        function nextMonth(){ showCalendarMonth(++currentMonthIndex); }
+    </script>
 </body>
 </html>
