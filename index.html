@@ -26,7 +26,13 @@ SOFTWARE.
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#FF6B9D" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="description" content="Gentle period companion for tracking your cycle" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="apple-touch-icon" href="./icon-192.png" />
   <title>ROS Cycle — gentle period companion</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
@@ -63,6 +69,7 @@ SOFTWARE.
       background: linear-gradient(135deg, var(--bg1), var(--bg2));
       color: var(--text);
       padding: 20px;
+      overscroll-behavior: none; /* Prevent pull-to-refresh issues */
     }
     .app {
       width: 100%;
@@ -126,6 +133,8 @@ SOFTWARE.
       background: var(--card);
       outline: none;
       color: var(--text);
+      font-size: 16px; /* Improved for touch */
+      -webkit-appearance: none; /* Fix iOS styling */
     }
     input:focus {
       box-shadow: 0 6px 20px rgba(255,107,157,0.12);
@@ -143,6 +152,8 @@ SOFTWARE.
       padding: 10px 16px;
       border-radius: 12px;
       font-weight: 700;
+      font-size: 16px; /* Improved for touch */
+      touch-action: manipulation; /* Better touch response */
     }
     .btn-primary {
       background: linear-gradient(45deg, var(--pink), var(--soft));
@@ -185,6 +196,7 @@ SOFTWARE.
       flex-direction: column;
       border: 1px solid #f4f4f4;
       position: relative;
+      touch-action: manipulation; /* Better touch */
     }
     .cell.other {
       background: #fafafa;
@@ -243,7 +255,23 @@ SOFTWARE.
         bottom: auto;
         top: 100%;
         transform: translateX(-50%);
+        white-space: normal; /* Wrap text on small screens */
+        max-width: 90vw; /* Prevent overflow */
       }
+      .grid { gap: 6px; }
+      .cell { min-height: 64px; }
+      header { gap: 10px; }
+    }
+    @media (max-width: 400px) {
+      body { padding: 10px; }
+      .app { padding: 15px; border-radius: 12px; }
+      button { padding: 8px 12px; font-size: 14px; }
+      .field { margin-bottom: 10px; }
+      input { font-size: 14px; }
+      .logo { font-size: 24px; }
+      .month-title { font-size: 16px; }
+      .weekday-label { font-size: 10px; }
+      .badge { font-size: 10px; }
     }
     .modal {
       position: fixed;
@@ -267,6 +295,7 @@ SOFTWARE.
       border-radius: 12px;
       max-width: 420px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.18);
+      width: 90%; /* Better for mobile */
     }
     footer {
       margin-top: 16px;
@@ -275,16 +304,13 @@ SOFTWARE.
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
     }
     .theme-toggle {
       font-size: 12px;
       cursor: pointer;
       color: var(--pink);
-    }
-    @media (max-width: 600px) {
-      .grid { gap: 6px; }
-      .cell { min-height: 64px; }
-      header { gap: 10px; }
     }
   </style>
 </head>
@@ -350,7 +376,7 @@ SOFTWARE.
       <section class="step" id="step-3">
         <div class="step-indicator">Step 3 of 3</div>
         <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
             <div>
               <div id="greeting" style="font-weight:800"></div>
               <div style="font-size:13px;color:var(--muted)" id="age-note"></div>
@@ -641,7 +667,14 @@ SOFTWARE.
     }
 
     function toggleTheme() {
-      document.documentElement.setAttribute('data-theme', document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme); // Persist theme choice
+    }
+
+    // Initialize theme from localStorage
+    if (localStorage.getItem('theme') === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
     }
 
     // keyboard & binding
@@ -697,6 +730,15 @@ SOFTWARE.
     // initialize focus traps
     trapFocus('modal');
     trapFocus('resetModal');
+
+    // Register service worker for PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./serviceworker.js')
+          .then(reg => console.log('Service Worker registered', reg))
+          .catch(err => console.log('Service Worker registration failed', err));
+      });
+    }
   </script>
 </body>
 </html>
