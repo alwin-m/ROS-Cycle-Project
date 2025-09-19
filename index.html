@@ -69,7 +69,7 @@ SOFTWARE.
       background: linear-gradient(135deg, var(--bg1), var(--bg2));
       color: var(--text);
       padding: 20px;
-      overscroll-behavior: none; /* Prevent pull-to-refresh issues */
+      overscroll-behavior: none;
     }
     .app {
       width: 100%;
@@ -133,8 +133,8 @@ SOFTWARE.
       background: var(--card);
       outline: none;
       color: var(--text);
-      font-size: 16px; /* Improved for touch */
-      -webkit-appearance: none; /* Fix iOS styling */
+      font-size: 16px;
+      -webkit-appearance: none;
     }
     input:focus {
       box-shadow: 0 6px 20px rgba(255,107,157,0.12);
@@ -152,8 +152,8 @@ SOFTWARE.
       padding: 10px 16px;
       border-radius: 12px;
       font-weight: 700;
-      font-size: 16px; /* Improved for touch */
-      touch-action: manipulation; /* Better touch response */
+      font-size: 16px;
+      touch-action: manipulation;
     }
     .btn-primary {
       background: linear-gradient(45deg, var(--pink), var(--soft));
@@ -196,7 +196,7 @@ SOFTWARE.
       flex-direction: column;
       border: 1px solid #f4f4f4;
       position: relative;
-      touch-action: manipulation; /* Better touch */
+      touch-action: manipulation;
     }
     .cell.other {
       background: #fafafa;
@@ -241,7 +241,8 @@ SOFTWARE.
       border-radius: 10px;
       padding: 8px 10px;
       box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-      white-space: nowrap;
+      white-space: normal;
+      max-width: 90vw;
       font-size: 13px;
       color: var(--text);
       display: none;
@@ -255,8 +256,6 @@ SOFTWARE.
         bottom: auto;
         top: 100%;
         transform: translateX(-50%);
-        white-space: normal; /* Wrap text on small screens */
-        max-width: 90vw; /* Prevent overflow */
       }
       .grid { gap: 6px; }
       .cell { min-height: 64px; }
@@ -295,7 +294,7 @@ SOFTWARE.
       border-radius: 12px;
       max-width: 420px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.18);
-      width: 90%; /* Better for mobile */
+      width: 90%;
     }
     footer {
       margin-top: 16px;
@@ -333,7 +332,7 @@ SOFTWARE.
           <p style="margin:0 0 12px;color:var(--muted)">We will ask just a few friendly questions. You can go back anytime.</p>
           <div class="field">
             <label for="name">Name</label>
-            <input id="name" type="text" placeholder="How should I call you?" autocomplete="name" aria-label="Name" />
+            <input id="name" type="text" placeholder="How should I call you?" autocomplete="name" aria-label="Name" required />
           </div>
           <div class="field">
             <label for="dob">Date of birth <span style="font-weight:400;color:var(--muted);font-size:13px">(used only for age guidance)</span></label>
@@ -355,15 +354,15 @@ SOFTWARE.
           <p style="margin:0 0 12px;color:var(--muted)">Just one last step — this is used to create friendly estimates.</p>
           <div class="field">
             <label for="last">When did your last period start?</label>
-            <input id="last" type="date" aria-label="Last period date" />
+            <input id="last" type="date" aria-label="Last period date" required />
           </div>
           <div class="field">
             <label for="cycle">Average cycle length (days)</label>
-            <input id="cycle" type="number" min="15" max="45" value="28" aria-label="Cycle length" />
+            <input id="cycle" type="number" min="15" max="45" value="28" aria-label="Cycle length" required />
           </div>
           <div class="field">
             <label for="periodLen">Average period length (days)</label>
-            <input id="periodLen" type="number" min="3" max="10" value="5" aria-label="Period length" />
+            <input id="periodLen" type="number" min="3" max="10" value="5" aria-label="Period length" required />
           </div>
           <div class="controls">
             <button class="btn-ghost" onclick="showStep(1)">← Back</button>
@@ -415,7 +414,7 @@ SOFTWARE.
     </main>
 
     <footer>
-      <div style="font-size:12px;color:var(--muted)">Open-source • MIT License</div>
+      <div style="font-size:12px;color:var(--muted)">Alwin • Open-source • MIT License</div>
       <div style="display:flex;gap:12px">
         <div class="theme-toggle" onclick="toggleTheme()">Toggle Dark Mode</div>
         <div style="font-size:12px;color:var(--muted)">Made for students • Privacy-first</div>
@@ -474,7 +473,7 @@ SOFTWARE.
     function nextToStep2() {
       const name = el('name').value.trim();
       const dob = el('dob').value;
-      if (name === '') return showModal('Please enter your name — a short nickname is fine.');
+      if (!name) return showModal('Please enter your name — a short nickname is fine.');
       state.name = name;
       if (dob) {
         const parsed = new Date(dob);
@@ -513,14 +512,14 @@ SOFTWARE.
       state.last = new Date(last.getFullYear(), last.getMonth(), last.getDate());
       state.cycle = cycleVal;
       state.periodLen = periodLenVal;
-      state.months = []; // Clear previous predictions
-      generateMonth(state.visibleIndex); // Lazy load only the first month
+      state.months = [];
+      generateMonth(state.visibleIndex);
       renderMonth(state.visibleIndex);
       showStep(3);
     }
 
     function generateMonth(index) {
-      if (state.months[index]) return; // Already generated
+      if (state.months[index]) return;
       const start = new Date(state.last.getFullYear(), state.last.getMonth(), 1);
       const oneDay = 24 * 60 * 60 * 1000;
       const mm = new Date(start.getFullYear(), start.getMonth() + index, 1);
@@ -544,7 +543,7 @@ SOFTWARE.
 
     function renderMonth(index) {
       if (index < 0 || index >= 12) return showModal('No prediction available for this month. We only predict 12 months.');
-      generateMonth(index); // Generate only if not already generated
+      generateMonth(index);
       const monthObj = state.months[index];
       el('monthTitle').innerText = `${getMonthName(monthObj.month)} ${monthObj.year}`;
       el('pred-count').innerText = 12;
@@ -669,12 +668,20 @@ SOFTWARE.
     function toggleTheme() {
       const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', theme);
-      localStorage.setItem('theme', theme); // Persist theme choice
+      try {
+        localStorage.setItem('theme', theme);
+      } catch (e) {
+        console.warn('localStorage unavailable, theme not persisted');
+      }
     }
 
-    // Initialize theme from localStorage
-    if (localStorage.getItem('theme') === 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
+    // Initialize theme
+    try {
+      if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    } catch (e) {
+      document.documentElement.setAttribute('data-theme', 'light');
     }
 
     // keyboard & binding
@@ -708,13 +715,20 @@ SOFTWARE.
       });
     }
 
-    // set max dates
+    // set max dates and input validation
     (function setMaxDates() {
       const today = new Date().toISOString().split('T')[0];
-      const dobMax = new Date();
-      dobMax.setFullYear(dobMax.getFullYear() - 9);
       el('dob').setAttribute('max', today);
       el('last').setAttribute('max', today);
+      // Enforce min/max for number inputs
+      el('cycle').addEventListener('input', () => {
+        if (el('cycle').value < 15) el('cycle').value = 15;
+        if (el('cycle').value > 45) el('cycle').value = 45;
+      });
+      el('periodLen').addEventListener('input', () => {
+        if (el('periodLen').value < 3) el('periodLen').value = 3;
+        if (el('periodLen').value > 10) el('periodLen').value = 10;
+      });
     })();
 
     // accessibility: focus first field on step change
@@ -734,7 +748,7 @@ SOFTWARE.
     // Register service worker for PWA
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./serviceworker.js')
+        navigator.serviceWorker.register('./serviceworker.js', { scope: './' })
           .then(reg => console.log('Service Worker registered', reg))
           .catch(err => console.log('Service Worker registration failed', err));
       });
