@@ -312,6 +312,25 @@ SOFTWARE.
       cursor: pointer;
       color: var(--pink);
     }
+    .checkbox-field {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .checkbox-field input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--pink);
+    }
+    a.github-link {
+      color: var(--pink);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    a.github-link:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -327,7 +346,7 @@ SOFTWARE.
     <main aria-live="polite">
       <!-- Step 1: basic info -->
       <section class="step active" id="step-1">
-        <div class="step-indicator">Step 1 of 3</div>
+        <div class="step-indicator">Step 1 of 4</div>
         <div class="card">
           <h3 style="margin:0 0 8px">Hello — let's make this simple ✨</h3>
           <p style="margin:0 0 12px;color:var(--muted)">We will ask just a few friendly questions. You can go back anytime.</p>
@@ -340,16 +359,74 @@ SOFTWARE.
             <input id="dob" type="date" aria-label="Date of birth" />
             <div style="font-size:12px;color:var(--muted);margin-top:6px">If you prefer, you can enter your age instead.</div>
           </div>
-          <div class="controls">
+          <div class="controls" style="justify-content: space-between;">
             <button class="btn-ghost" onclick="skipInfo()">Skip</button>
-            <button class="btn-primary" onclick="nextToStep2()" id="step1-next">Continue</button>
+            <div>
+              <button class="btn-primary" onclick="nextToPCOD()" style="margin-right: 10px;">Check for PCOD</button>
+              <button class="btn-primary" onclick="nextToStep2()" id="step1-next">Continue</button>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- Step 2: period details -->
+      <!-- Step 2: PCOD Symptom Checker -->
+      <section class="step" id="step-pcod">
+        <div class="step-indicator">Step 2 of 4</div>
+        <div class="card">
+          <h3 style="margin:0 0 8px">Check for Possible PCOD Symptoms</h3>
+          <p style="margin:0 0 12px;color:var(--muted)">Answer these questions about common symptoms. This is not a medical diagnosis—consult a doctor for advice.</p>
+          <form id="pcod-form" role="form" aria-label="PCOD symptom checker">
+            <div class="checkbox-field">
+              <input type="checkbox" id="symptom1" aria-label="Irregular or missed periods" />
+              <label for="symptom1">Irregular or missed periods</label>
+            </div>
+            <div class="checkbox-field">
+              <input type="checkbox" id="symptom2" aria-label="Excess facial or body hair" />
+              <label for="symptom2">Excess facial or body hair</label>
+            </div>
+            <div class="checkbox-field">
+              <input type="checkbox" id="symptom3" aria-label="Acne or oily skin" />
+              <label for="symptom3">Acne or oily skin</label>
+            </div>
+            <div class="checkbox-field">
+              <input type="checkbox" id="symptom4" aria-label="Difficulty getting pregnant" />
+              <label for="symptom4">Difficulty getting pregnant</label>
+            </div>
+            <div class="checkbox-field">
+              <input type="checkbox" id="symptom5" aria-label="Weight gain or difficulty losing weight" />
+              <label for="symptom5">Weight gain or difficulty losing weight</label>
+            </div>
+            <div class="checkbox-field">
+              <input type="checkbox" id="symptom6" aria-label="Thinning hair on the scalp" />
+              <label for="symptom6">Thinning hair on the scalp</label>
+            </div>
+            <div class="checkbox-field">
+              <input type="checkbox" id="symptom7" aria-label="Darkening of skin" />
+              <label for="symptom7">Darkening of skin (e.g., neck, groin)</label>
+            </div>
+            <div class="checkbox-field">
+              <input type="checkbox" id="symptom8" aria-label="Skin tags" />
+              <label for="symptom8">Skin tags</label>
+            </div>
+            <div class="checkbox-field">
+              <input type="checkbox" id="symptom9" aria-label="Pelvic pain" />
+              <label for="symptom9">Pelvic pain</label>
+            </div>
+            <div class="checkbox-field">
+              <input type="checkbox" id="symptom10" aria-label="Fatigue or low energy" />
+              <label for="symptom10">Fatigue or low energy</label>
+            </div>
+            <div class="controls">
+              <button class="btn-ghost" onclick="showStep(1)">← Back</button>
+              <button class="btn-primary" type="button" onclick="checkPCOD()">Submit</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Step 3: period details -->
       <section class="step" id="step-2">
-        <div class="step-indicator">Step 2 of 3</div>
+        <div class="step-indicator">Step 3 of 4</div>
         <div class="card">
           <h3 style="margin:0 0 8px">Period details</h3>
           <p style="margin:0 0 12px;color:var(--muted)">Just one last step — this is used to create friendly estimates.</p>
@@ -366,15 +443,15 @@ SOFTWARE.
             <input id="periodLen" type="number" min="3" max="10" value="5" aria-label="Period length" />
           </div>
           <div class="controls">
-            <button class="btn-ghost" onclick="showStep(1)">← Back</button>
+            <button class="btn-ghost" onclick="showStep('pcod')">← Back</button>
             <button class="btn-primary" onclick="createCalendar()">Create my calendar</button>
           </div>
         </div>
       </section>
 
-      <!-- Step 3: calendar -->
+      <!-- Step 4: calendar -->
       <section class="step" id="step-3">
-        <div class="step-indicator">Step 3 of 3</div>
+        <div class="step-indicator">Step 4 of 4</div>
         <div class="card">
           <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
             <div>
@@ -410,12 +487,12 @@ SOFTWARE.
             <button class="btn-primary" onclick="showResetModal()">Start Over</button>
           </div>
         </div>
-        <p style="margin-top:8px;font-size:13px;color:var(--muted)">⚠️ This is a student-built prototype for education. Not medically approved. Predictions are estimates. Use as guidance only.</p>
+        <p style="margin-top:8px;font-size:13px;color:var(--muted)">⚠️ This is an open-source, student-built prototype for educational purposes. Predictions are estimates based on average cycle data and may vary due to factors like diet, hormonal changes, or stress. Not medically approved. <a href="https://github.com/alwin-m/ROS-Cycle-Project" class="github-link" target="_blank" rel="noopener" aria-label="Contribute to ROS Cycle on GitHub">Contribute to our GitHub</a> to help improve accuracy!</p>
       </section>
     </main>
 
     <footer>
-      <div style="font-size:12px;color:var(--muted)">Open-source • MIT License</div>
+      <div style="font-size:12px;color:var(--muted)">Open-source • MIT License • <a href="https://github.com/alwin-m/ROS-Cycle-Project" class="github-link" target="_blank" rel="noopener" aria-label="Visit ROS Cycle GitHub repository">GitHub</a></div>
       <div style="display:flex;gap:12px">
         <div class="theme-toggle" onclick="toggleTheme()">Toggle Dark Mode</div>
         <div style="font-size:12px;color:var(--muted)">Made for students • Privacy-first</div>
@@ -427,8 +504,9 @@ SOFTWARE.
   <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalText">
     <div class="box">
       <div id="modalText" role="alert"></div>
-      <div style="text-align:right;margin-top:12px">
-        <button class="btn-primary" onclick="closeModal()" id="modalClose">OK</button>
+      <div style="text-align:right;margin-top:12px;display:flex;gap:10px;justify-content:flex-end">
+        <button class="btn-ghost" onclick="closeModal()">OK</button>
+        <button class="btn-primary" onclick="closeModal()">Check My Periods</button>
       </div>
     </div>
   </div>
@@ -454,14 +532,66 @@ SOFTWARE.
       cycle: 28,
       periodLen: 5,
       months: [],
-      visibleIndex: 0
+      visibleIndex: 0,
+      pcodChance: null // Store PCOD chance
     };
 
     // helpers
     const el = id => document.getElementById(id);
     function showStep(n) {
       document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-      el('step-' + n).classList.add('active');
+      if (typeof n === 'string') {
+        el('step-' + n).classList.add('active');
+      } else {
+        el('step-' + n).classList.add('active');
+      }
+      // Focus on the first input or button in the new step for accessibility
+      const firstInput = typeof n === 'string' ? el('step-' + n).querySelector('input, button') : el('step-' + n).querySelector('input, button');
+      if (firstInput) firstInput.focus();
+    }
+
+    function showModal(msg) {
+      // Render message with HTML to support links, with basic sanitization
+      el('modalText').innerHTML = msg.replace(/\n\n/g, '<br><br>').replace(/https:\/\/github\.com\/alwin-m\/ROS-Cycle-Project/g, '<a href="https://github.com/alwin-m/ROS-Cycle-Project" class="github-link" target="_blank" rel="noopener" aria-label="Contribute to ROS Cycle on GitHub">GitHub</a>');
+      el('modal').classList.add('active');
+      el('modal').querySelector('.btn-ghost').focus(); // Focus on OK button
+    }
+
+    function closeModal(id = 'modal') {
+      el(id).classList.remove('active');
+      // If closing from PCOD step, proceed to step 2
+      if (id === 'modal' && document.querySelector('#step-pcod.active')) {
+        showStep(2);
+      }
+    }
+
+    function showResetModal() {
+      el('resetModal').classList.add('active');
+      el('resetModal').querySelector('button').focus();
+    }
+
+    function resetAll() {
+      state = {
+        name: '',
+        dob: null,
+        age: null,
+        last: null,
+        cycle: 28,
+        periodLen: 5,
+        months: [],
+        visibleIndex: 0,
+        pcodChance: null
+      };
+      el('name').value = '';
+      el('dob').value = '';
+      el('last').value = '';
+      el('cycle').value = '28';
+      el('periodLen').value = '5';
+      el('calendarGrid').innerHTML = '';
+      el('monthTitle').innerText = 'Month';
+      el('pcod-form').reset(); // Reset PCOD form
+      closeModal('resetModal');
+      showStep(1);
     }
 
     function skipInfo() {
@@ -490,6 +620,44 @@ SOFTWARE.
       setTimeout(() => el('last').focus(), 200);
     }
 
+    function nextToPCOD() {
+      const name = el('name').value.trim();
+      const dob = el('dob').value;
+      if (name === '') return showModal('Please enter your name — a short nickname is fine.');
+      state.name = name;
+      if (dob) {
+        const parsed = new Date(dob);
+        if (isNaN(parsed)) return showModal('Invalid date of birth. Please use YYYY-MM-DD format.');
+        const age = calculateAge(parsed);
+        if (age < 9 || age > 55) {
+          return showModal('Age appears to be ' + age + ', which is outside the typical range (9–55). If correct, proceed; otherwise, check your input.');
+        }
+        state.dob = parsed;
+        state.age = age;
+      }
+      showStep('pcod');
+      setTimeout(() => el('symptom1').focus(), 200);
+    }
+
+    function checkPCOD() {
+      const symptoms = document.querySelectorAll('#pcod-form input[type="checkbox"]:checked');
+      const count = symptoms.length;
+      let chance = 'low';
+      let message = '';
+      if (count <= 2) {
+        chance = 'low';
+        message = 'Based on your responses, there is a low chance you have PCOD.';
+      } else if (count <= 5) {
+        chance = 'medium';
+        message = 'Based on your responses, there is a medium chance you have PCOD. Consider seeing a doctor.';
+      } else {
+        chance = 'high';
+        message = 'Based on your responses, there is a high chance you have PCOD. You should consider seeing a doctor for proper diagnosis.\n\n⚠️ Warning: PCOD can cause irregular cycles, which may reduce the accuracy of period predictions in this app. Predictions are estimates based on average cycle data and may vary due to factors like diet, stress, hormonal changes, or other influences. This is an open-source prototype, and we’re working to improve accuracy. Contribute to our https://github.com/alwin-m/ROS-Cycle-Project to help enhance features, like AI-driven predictions!';
+      }
+      state.pcodChance = chance; // Store PCOD chance
+      showModal(`${message} This is not a medical diagnosis—please consult a healthcare professional.`);
+    }
+
     function calculateAge(dob) {
       const diff = Date.now() - dob.getTime();
       return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
@@ -499,7 +667,7 @@ SOFTWARE.
       const lastVal = el('last').value;
       const cycleVal = parseInt(el('cycle').value, 10);
       const periodLenVal = parseInt(el('periodLen').value, 10);
-      if (!lastVal) return showModal('Please select your last period start date.');
+      if (!lastVal) return showModal('Please select your last period date.');
       if (isNaN(cycleVal) || cycleVal < 15 || cycleVal > 45) {
         return showModal('Cycle length should be between 15 and 45 days. If outside this range, consult a healthcare provider.');
       }
@@ -514,6 +682,7 @@ SOFTWARE.
       state.cycle = cycleVal;
       state.periodLen = periodLenVal;
       state.months = []; // Clear previous predictions
+      state.visibleIndex = 0;
       generateMonth(state.visibleIndex); // Lazy load only the first month
       renderMonth(state.visibleIndex);
       showStep(3);
@@ -562,183 +731,79 @@ SOFTWARE.
       for (let i = 0; i < totalCells; i++) {
         const cell = document.createElement('div');
         cell.className = 'cell';
-        cell.tabIndex = 0;
-        const dayIndex = i - startOffset + 1;
-        if (dayIndex < 1 || dayIndex > daysInMonth) {
-          cell.classList.add('other');
-          cell.innerHTML = '<div style="opacity:.4">-</div>';
-          grid.appendChild(cell);
-          continue;
+        if (i < startOffset || i >= startOffset + daysInMonth) {
+          cell.className += ' other';
+          cell.innerHTML = `<div class="daynum">-</div>`;
+        } else {
+          const dayIndex = i - startOffset;
+          const day = monthObj.days[dayIndex];
+          const dateStr = day.date.toISOString().split('T')[0];
+          cell.innerHTML = `<div class="daynum">${day.date.getDate()}</div>`;
+          if (day.type !== 'normal') {
+            cell.innerHTML += `<div class="badge ${day.type}">${day.type === 'period' ? 'Period' : 'Fertile'}</div>`;
+            const tip = document.createElement('div');
+            tip.className = 'tooltip';
+            tip.innerText = `${day.type === 'period' ? 'Period' : 'Fertile'} day: ${dateStr}`;
+            cell.appendChild(tip);
+          }
         }
-        const dayObj = monthObj.days[dayIndex - 1];
-        const node = document.createElement('div');
-        node.className = 'daynum';
-        node.innerText = dayObj.date.getDate();
-        cell.appendChild(node);
-        if (dayObj.type === 'period') {
-          const b = document.createElement('div');
-          b.className = 'badge period';
-          b.innerText = 'Period';
-          cell.classList.add('period');
-          cell.appendChild(b);
-        } else if (dayObj.type === 'fertile') {
-          const b = document.createElement('div');
-          b.className = 'badge fertile';
-          b.innerText = 'Fertile';
-          cell.classList.add('fertile');
-          cell.appendChild(b);
-        }
-        const tip = document.createElement('div');
-        tip.className = 'tooltip';
-        tip.innerText = dayObj.type === 'period' ? 'Estimated period day — self-care: cotton pads, warmth, hydration.' :
-                        dayObj.type === 'fertile' ? 'Fertile window — higher chance of conception. Take care, stay hydrated.' :
-                        'Regular day — maintain routine and hydration.';
-        cell.appendChild(tip);
-        cell.addEventListener('click', () => showDayModal(dayObj));
-        cell.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') showDayModal(dayObj);
-        });
+        cell.tabIndex = 0; // Make focusable
         grid.appendChild(cell);
       }
     }
 
-    function previous() {
-      if (state.visibleIndex > 0) {
-        state.visibleIndex--;
-        renderMonth(state.visibleIndex);
-      } else {
-        showModal('You are at the first predicted month.');
-      }
-    }
-
-    function next() {
-      if (state.visibleIndex < 11) {
-        state.visibleIndex++;
-        renderMonth(state.visibleIndex);
-      } else {
-        showModal('No further predictions. We only predict 12 months.');
-      }
-    }
-
-    function showDayModal(dayObj) {
-      const txt = [];
-      const dd = dayObj.date.toLocaleDateString();
-      txt.push(`<strong>${dd}</strong>`);
-      if (dayObj.type === 'period') {
-        txt.push('<p>Estimated flow: Heavy → Medium → Light across the days. Tips: use cotton pads, heat pack, hydrate.</p>');
-      } else if (dayObj.type === 'fertile') {
-        txt.push('<p>Fertile window day. If trying for pregnancy or avoiding it, consider additional tracking.</p>');
-      }
-      txt.push('<p style="font-size:12px;color:var(--muted)">Note: predictions are estimates; consult healthcare for medical questions.</p>');
-      el('modalText').innerHTML = txt.join('');
-      el('modal').classList.add('active');
-      el('modalClose').focus();
-    }
-
-    function showModal(msg) {
-      el('modalText').innerText = msg;
-      el('modal').classList.add('active');
-      el('modalClose').focus();
-    }
-
-    function showResetModal() {
-      el('resetModal').classList.add('active');
-      el('resetModal').querySelector('button.btn-primary').focus();
-    }
-
-    function closeModal(id = 'modal') {
-      el(id).classList.remove('active');
-      const activeStep = document.querySelector('.step.active');
-      if (activeStep) {
-        const input = activeStep.querySelector('input') || activeStep.querySelector('button');
-        if (input) input.focus();
-      }
-    }
-
-    function resetAll() {
-      state = { name: '', dob: null, age: null, last: null, cycle: 28, periodLen: 5, months: [], visibleIndex: 0 };
-      document.querySelectorAll('input').forEach(i => i.value = '');
-      showStep(1);
-      closeModal('resetModal');
-    }
-
-    function getMonthName(i) {
-      return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][i];
+    function getMonthName(month) {
+      const names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      return names[month];
     }
 
     function toggleTheme() {
-      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', theme);
-      localStorage.setItem('theme', theme); // Persist theme choice
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      localStorage.setItem('theme', isDark ? 'light' : 'dark');
     }
 
-    // Initialize theme from localStorage
-    if (localStorage.getItem('theme') === 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    }
-
-    // keyboard & binding
-    el('prevBtn').addEventListener('click', previous);
-    el('nextBtn').addEventListener('click', next);
-    document.addEventListener('keydown', (e) => {
-      if (document.querySelector('#step-3.active')) {
-        if (e.key === 'ArrowLeft') previous();
-        if (e.key === 'ArrowRight') next();
-      }
-      if (e.key === 'Escape' && el('modal').classList.contains('active')) closeModal('modal');
-      if (e.key === 'Escape' && el('resetModal').classList.contains('active')) closeModal('resetModal');
+    // Navigation for calendar
+    el('prevBtn').addEventListener('click', () => {
+      state.visibleIndex = Math.max(0, state.visibleIndex - 1);
+      renderMonth(state.visibleIndex);
     });
 
-    // focus trap for modals
-    function trapFocus(modalId) {
-      const modal = el(modalId);
-      const focusable = modal.querySelectorAll('button, [tabindex="0"]');
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      modal.addEventListener('keydown', (e) => {
-        if (e.key === 'Tab') {
-          if (e.shiftKey && document.activeElement === first) {
-            e.preventDefault();
-            last.focus();
-          } else if (!e.shiftKey && document.activeElement === last) {
-            e.preventDefault();
-            first.focus();
-          }
-        }
-      });
-    }
+    el('nextBtn').addEventListener('click', () => {
+      state.visibleIndex = Math.min(11, state.visibleIndex + 1);
+      renderMonth(state.visibleIndex);
+    });
 
-    // set max dates
-    (function setMaxDates() {
+    // Set max dates to today
+    function setMaxDates() {
       const today = new Date().toISOString().split('T')[0];
-      const dobMax = new Date();
-      dobMax.setFullYear(dobMax.getFullYear() - 9);
-      el('dob').setAttribute('max', today);
-      el('last').setAttribute('max', today);
-    })();
+      el('dob').max = today;
+      el('last').max = today;
+    }
 
-    // accessibility: focus first field on step change
-    const observer = new MutationObserver(() => {
-      const active = document.querySelector('.step.active');
-      if (active) {
-        const input = active.querySelector('input') || active.querySelector('button');
-        if (input) input.focus();
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && el('modal').classList.contains('active')) {
+        closeModal();
+      } else if (e.key === 'Escape' && el('resetModal').classList.contains('active')) {
+        closeModal('resetModal');
       }
     });
-    observer.observe(document.querySelector('main'), { childList: true, subtree: true });
 
-    // initialize focus traps
-    trapFocus('modal');
-    trapFocus('resetModal');
-
-    // Register service worker for PWA
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./serviceworker.js')
-          .then(reg => console.log('Service Worker registered', reg))
-          .catch(err => console.log('Service Worker registration failed', err));
-      });
-    }
+    // Initialize
+    (function init() {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      setMaxDates();
+      el('name').focus();
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('serviceworker.js')
+          .then(() => console.log('Service Worker registered successfully'))
+          .catch(err => console.warn('Service Worker registration failed:', err.message));
+      } else {
+        console.warn('Service Worker not supported in this browser');
+      }
+    })();
   </script>
 </body>
 </html>
