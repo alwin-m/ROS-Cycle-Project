@@ -69,7 +69,8 @@ SOFTWARE.
       background: linear-gradient(135deg, var(--bg1), var(--bg2));
       color: var(--text);
       padding: 20px;
-      overscroll-behavior: none; /* Prevent pull-to-refresh issues */
+      overscroll-behavior: none;
+      transition: background 0.3s ease;
     }
     .app {
       width: 100%;
@@ -78,6 +79,11 @@ SOFTWARE.
       border-radius: 18px;
       box-shadow: var(--shadow);
       padding: 20px;
+      animation: fadeIn 0.5s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     header {
       display: flex;
@@ -97,24 +103,34 @@ SOFTWARE.
       font-size: 13px;
       color: var(--muted);
       text-align: center;
+      transition: color 0.3s ease;
     }
     main { margin-top: 14px; }
     .step {
       display: none;
       opacity: 0;
       transform: translateY(12px);
-      transition: all .28s ease;
+      transition: opacity 0.4s ease, transform 0.4s ease;
     }
     .step.active {
       display: block;
       opacity: 1;
       transform: translateY(0);
+      animation: slideIn 0.4s ease-out;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     .card {
       background: var(--card);
       border-radius: 12px;
       padding: 18px;
       box-shadow: 0 4px 18px rgba(0,0,0,0.04);
+      transition: box-shadow 0.3s ease;
+    }
+    .card:hover {
+      box-shadow: 0 6px 24px rgba(0,0,0,0.08);
     }
     .field {
       margin-bottom: 12px;
@@ -124,6 +140,7 @@ SOFTWARE.
       display: block;
       font-weight: 600;
       margin-bottom: 6px;
+      transition: color 0.3s ease;
     }
     input[type="text"], input[type="date"], input[type="number"] {
       width: 100%;
@@ -133,12 +150,14 @@ SOFTWARE.
       background: var(--card);
       outline: none;
       color: var(--text);
-      font-size: 16px; /* Improved for touch */
-      -webkit-appearance: none; /* Fix iOS styling */
+      font-size: 16px;
+      -webkit-appearance: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
     }
     input:focus {
       box-shadow: 0 6px 20px rgba(255,107,157,0.12);
       border-color: var(--pink);
+      transform: scale(1.01);
     }
     .controls {
       display: flex;
@@ -152,16 +171,30 @@ SOFTWARE.
       padding: 10px 16px;
       border-radius: 12px;
       font-weight: 700;
-      font-size: 16px; /* Improved for touch */
-      touch-action: manipulation; /* Better touch response */
+      font-size: 16px;
+      touch-action: manipulation;
+      transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    button:active {
+      transform: scale(0.95);
     }
     .btn-primary {
       background: linear-gradient(45deg, var(--pink), var(--soft));
       color: white;
     }
+    .btn-primary:hover {
+      background: linear-gradient(45deg, #ff4a80, #ffa8b8);
+    }
     .btn-ghost {
       background: transparent;
       color: var(--text);
+    }
+    .btn-ghost:hover {
+      background: rgba(0,0,0,0.05);
     }
     .month-nav {
       display: flex;
@@ -172,11 +205,13 @@ SOFTWARE.
     .month-title {
       font-weight: 800;
       font-size: 18px;
+      transition: font-size 0.3s ease;
     }
     .grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 8px;
+      transition: gap 0.3s ease;
     }
     .weekday-label {
       text-align: center;
@@ -184,6 +219,7 @@ SOFTWARE.
       font-weight: 600;
       color: var(--muted);
       padding: 8px 0;
+      transition: font-size 0.3s ease;
     }
     .cell {
       background: var(--card);
@@ -196,7 +232,12 @@ SOFTWARE.
       flex-direction: column;
       border: 1px solid #f4f4f4;
       position: relative;
-      touch-action: manipulation; /* Better touch */
+      touch-action: manipulation;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, min-height 0.3s ease;
+    }
+    .cell:hover, .cell:focus {
+      transform: scale(1.03);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
     .cell.other {
       background: #fafafa;
@@ -212,6 +253,12 @@ SOFTWARE.
       font-size: 11px;
       padding: 4px 6px;
       border-radius: 8px;
+      animation: badgePulse 1.5s infinite;
+    }
+    @keyframes badgePulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
     }
     .period {
       background: linear-gradient(45deg, var(--pink), #ff9bbf);
@@ -231,6 +278,10 @@ SOFTWARE.
       width: 14px;
       height: 14px;
       border-radius: 4px;
+      transition: transform 0.2s ease;
+    }
+    .legend .box:hover {
+      transform: scale(1.2);
     }
     .tooltip {
       position: absolute;
@@ -246,32 +297,13 @@ SOFTWARE.
       color: var(--text);
       display: none;
       z-index: 10;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
     .cell:hover .tooltip, .cell:focus-within .tooltip {
       display: block;
-    }
-    @media (max-width: 600px) {
-      .tooltip {
-        bottom: auto;
-        top: 100%;
-        transform: translateX(-50%);
-        white-space: normal; /* Wrap text on small screens */
-        max-width: 90vw; /* Prevent overflow */
-      }
-      .grid { gap: 6px; }
-      .cell { min-height: 64px; }
-      header { gap: 10px; }
-    }
-    @media (max-width: 400px) {
-      body { padding: 10px; }
-      .app { padding: 15px; border-radius: 12px; }
-      button { padding: 8px 12px; font-size: 14px; }
-      .field { margin-bottom: 10px; }
-      input { font-size: 14px; }
-      .logo { font-size: 24px; }
-      .month-title { font-size: 16px; }
-      .weekday-label { font-size: 10px; }
-      .badge { font-size: 10px; }
+      opacity: 1;
+      transform: translateX(-50%) translateY(-4px);
     }
     .modal {
       position: fixed;
@@ -285,9 +317,12 @@ SOFTWARE.
       align-items: center;
       z-index: 60;
       display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
     .modal.active {
       display: flex;
+      opacity: 1;
     }
     .modal .box {
       background: var(--card);
@@ -295,7 +330,13 @@ SOFTWARE.
       border-radius: 12px;
       max-width: 420px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.18);
-      width: 90%; /* Better for mobile */
+      width: 90%;
+      transform: translateY(20px);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .modal.active .box {
+      transform: translateY(0);
+      opacity: 1;
     }
     footer {
       margin-top: 16px;
@@ -306,30 +347,80 @@ SOFTWARE.
       align-items: center;
       flex-wrap: wrap;
       gap: 10px;
+      transition: font-size 0.3s ease;
     }
     .theme-toggle {
       font-size: 12px;
       cursor: pointer;
       color: var(--pink);
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+    .theme-toggle:hover {
+      color: #ff4a80;
+      transform: scale(1.05);
     }
     .checkbox-field {
       display: flex;
       align-items: center;
       gap: 8px;
       margin-bottom: 8px;
+      transition: gap 0.3s ease;
     }
     .checkbox-field input[type="checkbox"] {
       width: 18px;
       height: 18px;
       accent-color: var(--pink);
+      transition: transform 0.2s ease;
+    }
+    .checkbox-field input[type="checkbox"]:hover {
+      transform: scale(1.1);
     }
     a.github-link {
       color: var(--pink);
       text-decoration: none;
       font-weight: 600;
+      transition: color 0.2s ease, transform 0.2s ease;
     }
     a.github-link:hover {
+      color: #ff4a80;
       text-decoration: underline;
+      transform: scale(1.05);
+    }
+    /* Enhanced Responsive Design */
+    @media (max-width: 768px) {
+      body { padding: 10px; }
+      .app { max-width: 100%; padding: 15px; border-radius: 12px; }
+      .logo { font-size: 24px; }
+      header { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .month-title { font-size: 16px; }
+      .weekday-label { font-size: 10px; }
+      .cell { min-height: 50px; padding: 8px; }
+      .badge { font-size: 10px; right: 6px; top: 6px; }
+      .grid { gap: 6px; }
+      button { padding: 8px 12px; font-size: 14px; }
+      input { font-size: 14px; padding: 10px 12px; }
+      .field { margin-bottom: 10px; }
+      footer { font-size: 12px; flex-direction: column; align-items: flex-start; }
+      .modal .box { padding: 15px; max-width: 90%; }
+    }
+    @media (max-width: 480px) {
+      .logo { font-size: 22px; }
+      .month-title { font-size: 14px; }
+      .weekday-label { font-size: 9px; }
+      .cell { min-height: 45px; padding: 6px; }
+      .badge { font-size: 9px; right: 4px; top: 4px; }
+      .grid { gap: 4px; }
+      button { padding: 6px 10px; font-size: 12px; }
+      input { font-size: 12px; padding: 8px 10px; }
+      .field { margin-bottom: 8px; }
+      footer { font-size: 11px; }
+      .tooltip { font-size: 12px; padding: 6px 8px; max-width: 80vw; white-space: normal; }
+      .step-indicator { font-size: 12px; }
+    }
+    @media (min-width: 769px) {
+      .app { max-width: 760px; }
+      .cell { min-height: 60px; }
+      .grid { gap: 10px; }
     }
   </style>
 </head>
