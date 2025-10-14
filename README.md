@@ -1,3 +1,5 @@
+<img width="1200" height="1200" alt="ROSCYCLE" src="https://github.com/user-attachments/assets/5d7d8465-d727-4325-9b2e-3f415cb45589" />
+
 ROS Cycle, Open Source Menstrual Cycle Tracker
 
 ROS Cycle is an open source project that helps women and girls understand their menstrual health. The application makes it easy to log the date of the last period, the cycle length, and the duration of periods. It then uses this information to predict future cycles.
@@ -12,4 +14,4 @@ The goal of ROS Cycle is to offer a simple, open, and privacy-friendly tool for 
 
 ROS Cycle is not just a tracker; it’s a learning companion for menstrual health, with potential for growth through community-driven updates and improvements.
 
-<img width="1200" height="1200" alt="ROSCYCLE" src="https://github.com/user-attachments/assets/5d7d8465-d727-4325-9b2e-3f415cb45589" />
+
