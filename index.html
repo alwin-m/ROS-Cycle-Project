@@ -1,235 +1,832 @@
 <!--
-MIT License
+MITライセンス
 
-Copyright (c) 2025 Alwin
+著作権 (c) 2025 Alwin
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+本ソフトウェアおよび関連するドキュメントファイル（以下「ソフトウェア」）のコピーを取得したすべての者に、以下に定める条件に従い、ソフトウェアを制限なく使用、コピー、改変、結合、公開、配布、サブライセンス、および/または販売する権利を含むがこれに限定されない権利を無償で付与します。
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+上記の著作権表示およびこの許可通知は、ソフトウェアのすべてのコピーまたは実質的な部分に含まれるものとします。
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+ソフトウェアは「現状のまま」提供され、商品性、特定の目的への適合性、非侵害を含むがこれに限定されない、明示または黙示のいかなる保証もありません。著作者または著作権者は、契約、不法行為、またはその他の行為に関わらず、ソフトウェアまたはその使用、その他の取り扱いから生じるいかなる請求、損害、その他の責任についても一切責任を負いません。
 -->
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#FF6B9D" />
+  <meta name="theme-color" content="#FFB7C5" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="#FF6B9D" />
-  <meta name="description" content="Gentle period companion for tracking your cycle" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="#FFB7C5" />
+  <meta name="description" content="優しい生理トラッカーであなたのサイクルをサポート" />
   <link rel="manifest" href="./manifest.json" />
   <link rel="apple-touch-icon" href="./icon-192.png" />
   <link rel="icon" type="image/png" href="alwin.png" />
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" as="style" />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet" async />
-  <title>ROS Cycle — gentle period companion</title>
-  <style>:root{--bg1:#FFF0F5;--bg2:#F0FFF0;--pink:#FF6B9D;--soft:#FFB6C1;--mint:#98D8C8;--text:#3b3b3b;--muted:#8A8A8A;--card:#ffffff;--shadow:0 6px 24px rgba(0,0,0,0.08);--bg-dark:#2b2b2b;--card-dark:#3c3c3c;--text-dark:#f0f0f0;--muted-dark:#b0b0b0;}[data-theme="dark"]{--bg1:#2b2b2b;--bg2:#3c3c3c;--card:#3c3c3c;--text:#f0f0f0;--muted:#b0b0b0;}*{box-sizing:border-box;}html,body{height:100%;}body{font-family:'Nunito',system-ui,-apple-system,Segoe UI,Roboto;margin:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--bg1),var(--bg2));color:var(--text);padding:20px;overscroll-behavior:none;}.app{width:100%;max-width:760px;background:var(--card);border-radius:18px;box-shadow:var(--shadow);padding:20px;}header{display:flex;align-items:center;gap:16px;}.logo{font-size:28px;font-weight:800;background:linear-gradient(45deg,var(--pink),var(--soft));-webkit-background-clip:text;color:transparent;}.lead{color:var(--muted);font-weight:300;}.step-indicator{margin:10px 0;font-size:13px;color:var(--muted);text-align:center;}main{margin-top:14px;}.step{display:none;opacity:0;transform:translateY(12px);transition:all .28s ease;}.step.active{display:block;opacity:1;transform:translateY(0);}.card{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 4px 18px rgba(0,0,0,0.04);}.field{margin-bottom:12px;text-align:left;}label{display:block;font-weight:600;margin-bottom:6px;}input[type="text"],input[type="date"],input[type="number"]{width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid #f2dce4;background:var(--card);outline:none;color:var(--text);font-size:16px;-webkit-appearance:none;}input:focus{box-shadow:0 6px 20px rgba(255,107,157,0.12);border-color:var(--pink);}.controls{display:flex;gap:10px;justify-content:flex-end;margin-top:10px;}button{cursor:pointer;border:0;padding:10px 16px;border-radius:12px;font-weight:700;font-size:16px;touch-action:manipulation;}.btn-primary{background:linear-gradient(45deg,var(--pink),var(--soft));color:white;}.btn-ghost{background:transparent;color:var(--text);}.month-nav{display:flex;align-items:center;justify-content:space-between;margin:18px 0;}.month-title{font-weight:800;font-size:18px;}.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;}.weekday-label{text-align:center;font-size:12px;font-weight:600;color:var(--muted);padding:8px 0;}.cell{background:var(--card);border-radius:10px;padding:10px;min-height:56px;display:flex;align-items:flex-start;justify-content:center;flex-direction:column;border:1px solid #f4f4f4;position:relative;touch-action:manipulation;}.cell.other{background:#fafafa;color:#bbb;}.daynum{font-weight:700;}.badge{position:absolute;right:8px;top:8px;font-size:11px;padding:4px 6px;border-radius:8px;}.period{background:linear-gradient(45deg,var(--pink),#ff9bbf);color:#fff;}.fertile{background:linear-gradient(45deg,var(--mint),#dff6ee);color:var(--text);}.legend{display:flex;gap:12px;margin-top:10px;align-items:center;}.legend .box{width:14px;height:14px;border-radius:4px;}.tooltip{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:var(--card);border-radius:10px;padding:8px 10px;box-shadow:0 6px 20px rgba(0,0,0,0.12);white-space:nowrap;font-size:13px;color:var(--text);display:none;z-index:10;}.cell:hover .tooltip,.cell:focus-within .tooltip{display:block;}@media (max-width:768px){header{flex-direction:column;padding:12px 20px;}nav a{margin:8px;font-size:0.9rem;}.hero h1{font-size:2.2rem;}section{padding:80px 20px;}.loader h1{font-size:1.2rem;}.loader .spinner{width:14px;height:14px;}.tooltip{bottom:auto;top:100%;transform:translateX(-50%);white-space:normal;max-width:90vw;}.grid{gap:6px;}.cell{min-height:64px;}header{gap:10px;}}.modal{position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.45);display:flex;justify-content:center;align-items:center;z-index:60;display:none;}.modal.active{display:flex;}.modal .box{background:var(--card);padding:18px;border-radius:12px;max-width:420px;box-shadow:0 10px 40px rgba(0,0,0,0.18);width:90%;}footer{margin-top:16px;font-size:13px;color:var(--muted);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}.theme-toggle{font-size:12px;cursor:pointer;color:var(--pink);}.checkbox-field{display:flex;align-items:center;gap:8px;margin-bottom:8px;}.checkbox-field input[type="checkbox"]{width:18px;height:18px;accent-color:var(--pink);}a.github-link,a.portfolio-link{color:var(--pink);text-decoration:none;font-weight:600;}a.github-link:hover,a.portfolio-link:hover{text-decoration:underline;}</style>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;600;700&display=swap" as="style" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;600;700&display=swap" rel="stylesheet" async />
+  <title>ROSサイクル — 優しい生理トラッカー</title>
+  <style>
+    :root {
+      --bg1: #FFF5F7; /* Sakura pink */
+      --bg2: #F0FFF2; /* Matcha green */
+      --pink: #FFB7C5; /* Softer sakura pink */
+      --soft: #FFDDE1; /* Light cherry blossom */
+      --mint: #A8D5BA; /* Matcha-inspired green */
+      --text: #2E2E2E;
+      --muted: #7A7A7A;
+      --card: #FFFFFF;
+      --shadow: 0 4px 16px rgba(0,0,0,0.1);
+      --bg-dark: #2A2A2A;
+      --card-dark: #3A3A3A;
+      --text-dark: #F2F2F2;
+      --muted-dark: #A0A0A0;
+    }
+    [data-theme="dark"] {
+      --bg1: #2A2A2A;
+      --bg2: #3A3A3A;
+      --card: #3A3A3A;
+      --text: #F2F2F2;
+      --muted: #A0A0A0;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Noto Sans JP', system-ui, -apple-system, Segoe UI, Roboto;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      color: var(--text);
+      padding: 20px;
+      overscroll-behavior: none;
+    }
+    .app {
+      width: 100%;
+      max-width: 760px;
+      background: var(--card);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 24px;
+      animation: fadeIn 0.5s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+    }
+    .logo {
+      font-size: 30px;
+      font-weight: 700;
+      background: linear-gradient(45deg, var(--pink), var(--soft));
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .lead {
+      color: var(--muted);
+      font-weight: 300;
+      font-size: 14px;
+    }
+    .step-indicator {
+      margin: 12px 0;
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+      letter-spacing: 1px;
+    }
+    main { margin-top: 16px; }
+    .step {
+      display: none;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: all 0.3s ease-in-out;
+    }
+    .step.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+      transition: transform 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+    }
+    .field {
+      margin-bottom: 14px;
+      text-align: left;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    input[type="text"], input[type="date"], input[type="number"] {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1.5px solid #FFE1E6;
+      background: var(--card);
+      outline: none;
+      color: var(--text);
+      font-size: 16px;
+      -webkit-appearance: none;
+      transition: all 0.2s ease;
+    }
+    input:focus {
+      box-shadow: 0 0 10px rgba(255,183,197,0.3);
+      border-color: var(--pink);
+      transform: scale(1.02);
+    }
+    .controls {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 12px;
+    }
+    button {
+      cursor: pointer;
+      border: 0;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 15px;
+      touch-action: manipulation;
+      transition: all 0.2s ease;
+    }
+    .btn-primary {
+      background: linear-gradient(45deg, var(--pink), var(--soft));
+      color: white;
+    }
+    .btn-primary:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 8px rgba(255,183,197,0.5);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+    }
+    .btn-ghost:hover {
+      background: rgba(255,183,197,0.1);
+    }
+    .month-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 20px 0;
+    }
+    .month-title {
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--text);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+    .weekday-label {
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      padding: 8px 0;
+    }
+    .cell {
+      background: var(--card);
+      border-radius: 10px;
+      padding: 10px;
+      min-height: 60px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      flex-direction: column;
+      border: 1px solid #F5F5F5;
+      position: relative;
+      touch-action: manipulation;
+      transition: all 0.2s ease;
+    }
+    .cell:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 8px rgba(255,183,197,0.3);
+    }
+    .cell.other {
+      background: #FAFAFA;
+      color: #BBB;
+    }
+    .daynum { font-weight: 700; }
+    .badge {
+      position: absolute;
+      right: 6px;
+      top: 6px;
+      font-size: 10px;
+      padding: 4px 6px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    .period {
+      background: linear-gradient(45deg, var(--pink), #FFDDE1);
+      color: #FFF;
+    }
+    .fertile {
+      background: linear-gradient(45deg, var(--mint), #E6F5ED);
+      color: var(--text);
+    }
+    .legend {
+      display: flex;
+      gap: 12px;
+      margin-top: 12px;
+      align-items: center;
+    }
+    .legend .box {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+    }
+    .tooltip {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--card);
+      border-radius: 10px;
+      padding: 8px 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      white-space: nowrap;
+      font-size: 12px;
+      color: var(--text);
+      display: none;
+      z-index: 10;
+      max-width: 240px;
+    }
+    .cell:hover .tooltip, .cell:focus-within .tooltip { display: block; }
+    @media (max-width: 768px) {
+      header { flex-direction: column; padding: 12px 16px; }
+      .tooltip {
+        bottom: auto;
+        top: 100%;
+        transform: translateX(-50%);
+        white-space: normal;
+        max-width: 90vw;
+      }
+      .grid { gap: 5px; }
+      .cell { min-height: 56px; }
+      .app { padding: 16px; }
+    }
+    .modal {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 60;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+    .modal.active { display: flex; }
+    .modal .box {
+      background: var(--card);
+      padding: 20px;
+      border-radius: 14px;
+      max-width: 440px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      width: 90%;
+      animation: popIn 0.3s ease;
+    }
+    @keyframes popIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    footer {
+      margin-top: 16px;
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .theme-toggle {
+      font-size: 12px;
+      cursor: pointer;
+      color: var(--pink);
+      transition: color 0.2s ease;
+    }
+    .theme-toggle:hover {
+      color: var(--soft);
+    }
+    .checkbox-field {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .checkbox-field input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--pink);
+    }
+    a.github-link, a.portfolio-link {
+      color: var(--pink);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    a.github-link:hover, a.portfolio-link:hover {
+      text-decoration: underline;
+      color: var(--soft);
+    }
+  </style>
 </head>
 <body>
-  <div class="app" role="application" aria-label="ROS Cycle period tracker">
+  <div class="app" role="application" aria-label="ROSサイクル・トラッカー">
     <header>
-      <div class="logo">🌸 ROS Cycle</div>
+      <div class="logo">🌸 ROSサイクル</div>
       <div>
-        <div class="lead">Gentle, private & student-friendly</div>
-        <div style="font-size:12px;color:var(--muted)">No data stored. Local only for this demo.</div>
+        <div class="lead">優しくて、プライバシーを守る、学生向けアプリ</div>
+        <div style="font-size:12px;color:var(--muted)">データは保存されません。このデモはローカル専用です。</div>
       </div>
     </header>
 
     <main aria-live="polite">
-      <!-- Step 1: basic info -->
+      <!-- ステップ1: 基本情報 -->
       <section class="step active" id="step-1">
-        <div class="step-indicator">Step 1 of 4</div>
+        <div class="step-indicator">ステップ 1 / 4</div>
         <div class="card">
-          <h3 style="margin:0 0 8px">Hello — let's make this simple ✨</h3>
-          <p style="margin:0 0 12px;color:var(--muted)">We will ask just a few friendly questions. You can go back anytime.</p>
+          <h3 style="margin:0 0 8px">こんにちは！簡単でしょ？✨</h3>
+          <p style="margin:0 0 12px;color:var(--muted)">いくつか優しい質問をするだけ。いつでも戻れますよ！</p>
           <div class="field">
-            <label for="name">Name</label>
-            <input id="name" type="text" placeholder="How should I call you?" autocomplete="name" aria-label="Name" />
+            <label for="name">お名前</label>
+            <input id="name" type="text" placeholder="なんて呼べばいい？" autocomplete="name" aria-label="お名前" />
           </div>
           <div class="field">
-            <label for="dob">Date of birth <span style="font-weight:400;color:var(--muted);font-size:13px">(used only for age guidance)</span></label>
-            <input id="dob" type="date" aria-label="Date of birth" />
-            <div style="font-size:12px;color:var(--muted);margin-top:6px">If you prefer, you can enter your age instead.</div>
+            <label for="dob">生年月日 <span style="font-weight:400;color:var(--muted);font-size:13px">（年齢確認用のみ）</span></label>
+            <input id="dob" type="date" aria-label="生年月日" />
+            <div style="font-size:12px;color:var(--muted);margin-top:6px">年齢を入力しても大丈夫だよ！</div>
           </div>
           <div class="controls" style="justify-content: space-between;">
-            <button class="btn-ghost" onclick="skipInfo()">Skip</button>
+            <button class="btn-ghost" onclick="skipInfo()">スキップ</button>
             <div>
-              <button class="btn-primary" onclick="nextToPCOD()" style="margin-right: 10px;">Check for PCOD</button>
-              <button class="btn-primary" onclick="nextToStep2()" id="step1-next">Continue</button>
+              <button class="btn-primary" onclick="nextToPCOD()" style="margin-right: 10px;">PCOSチェック</button>
+              <button class="btn-primary" onclick="nextToStep2()" id="step1-next">次へ</button>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Step 2: PCOD Symptom Checker -->
+      <!-- ステップ2: PCOS症状チェック -->
       <section class="step" id="step-pcod">
-        <div class="step-indicator">Step 2 of 4</div>
+        <div class="step-indicator">ステップ 2 / 4</div>
         <div class="card">
-          <h3 style="margin:0 0 8px">Check for Possible PCOD Symptoms</h3>
-          <p style="margin:0 0 12px;color:var(--muted)">Answer these questions about common symptoms. This is not a medical diagnosis—consult a doctor for advice.</p>
-          <form id="pcod-form" role="form" aria-label="PCOD symptom checker">
+          <h3 style="margin:0 0 8px">多嚢胞性卵巣症候群（PCOS）の症状チェック</h3>
+          <p style="margin:0 0 12px;color:var(--muted)">一般的な症状について答えてね。これは医療診断ではないので、お医者さんに相談してくださいね。</p>
+          <form id="pcod-form" role="form" aria-label="PCOS症状チェック">
             <div class="checkbox-field">
-              <input type="checkbox" id="symptom1" aria-label="Irregular or missed periods" />
-              <label for="symptom1">Irregular or missed periods</label>
+              <input type="checkbox" id="symptom1" aria-label="生理が不規則または来ない" />
+              <label for="symptom1">生理が不規則または来ない</label>
             </div>
             <div class="checkbox-field">
-              <input type="checkbox" id="symptom2" aria-label="Excess facial or body hair" />
-              <label for="symptom2">Excess facial or body hair</label>
+              <input type="checkbox" id="symptom2" aria-label="顔や体の毛が濃い" />
+              <label for="symptom2">顔や体の毛が濃い</label>
             </div>
             <div class="checkbox-field">
-              <input type="checkbox" id="symptom3" aria-label="Acne or oily skin" />
-              <label for="symptom3">Acne or oily skin</label>
+              <input type="checkbox" id="symptom3" aria-label="ニキビや脂性肌" />
+              <label for="symptom3">ニキビや脂性肌</label>
             </div>
             <div class="checkbox-field">
-              <input type="checkbox" id="symptom4" aria-label="Difficulty getting pregnant" />
-              <label for="symptom4">Difficulty getting pregnant</label>
+              <input type="checkbox" id="symptom4" aria-label="妊娠しにくい" />
+              <label for="symptom4">妊娠しにくい</label>
             </div>
             <div class="checkbox-field">
-              <input type="checkbox" id="symptom5" aria-label="Weight gain or difficulty losing weight" />
-              <label for="symptom5">Weight gain or difficulty losing weight</label>
+              <input type="checkbox" id="symptom5" aria-label="体重増加や痩せにくい" />
+              <label for="symptom5">体重増加や痩せにくい</label>
             </div>
             <div class="checkbox-field">
-              <input type="checkbox" id="symptom6" aria-label="Thinning hair on the scalp" />
-              <label for="symptom6">Thinning hair on the scalp</label>
+              <input type="checkbox" id="symptom6" aria-label="頭髪が薄くなる" />
+              <label for="symptom6">頭髪が薄くなる</label>
             </div>
             <div class="checkbox-field">
-              <input type="checkbox" id="symptom7" aria-label="Darkening of skin" />
-              <label for="symptom7">Darkening of skin (e.g., neck, groin)</label>
+              <input type="checkbox" id="symptom7" aria-label="皮膚の黒ずみ" />
+              <label for="symptom7">皮膚の黒ずみ（例：首、股間）</label>
             </div>
             <div class="checkbox-field">
-              <input type="checkbox" id="symptom8" aria-label="Skin tags" />
-              <label for="symptom8">Skin tags</label>
+              <input type="checkbox" id="symptom8" aria-label="皮膚のタグ" />
+              <label for="symptom8">皮膚のタグ</label>
             </div>
             <div class="checkbox-field">
-              <input type="checkbox" id="symptom9" aria-label="Pelvic pain" />
-              <label for="symptom9">Pelvic pain</label>
+              <input type="checkbox" id="symptom9" aria-label="骨盤の痛み" />
+              <label for="symptom9">骨盤の痛み</label>
             </div>
             <div class="checkbox-field">
-              <input type="checkbox" id="symptom10" aria-label="Fatigue or low energy" />
-              <label for="symptom10">Fatigue or low energy</label>
+              <input type="checkbox" id="symptom10" aria-label="疲れやすさや低エネルギー" />
+              <label for="symptom10">疲れやすさや低エネルギー</label>
             </div>
             <div class="controls">
-              <button class="btn-ghost" onclick="showStep(1)">← Back</button>
-              <button class="btn-primary" type="button" onclick="checkPCOD()">Submit</button>
+              <button class="btn-ghost" onclick="showStep(1)">← 戻る</button>
+              <button class="btn-primary" type="button" onclick="checkPCOD()">送信</button>
             </div>
           </form>
         </div>
       </section>
 
-      <!-- Step 3: period details -->
+      <!-- ステップ3: 生理の詳細 -->
       <section class="step" id="step-2">
-        <div class="step-indicator">Step 3 of 4</div>
+        <div class="step-indicator">ステップ 3 / 4</div>
         <div class="card">
-          <h3 style="margin:0 0 8px">Period details</h3>
-          <p style="margin:0 0 12px;color:var(--muted)">Just one last step — this is used to create friendly estimates.</p>
+          <h3 style="margin:0 0 8px">生理の詳細</h3>
+          <p style="margin:0 0 12px;color:var(--muted)">あと一歩！これで優しい予測を作りますよ。</p>
           <div class="field">
-            <label for="last">When did your last period start?</label>
-            <input id="last" type="date" aria-label="Last period date" />
+            <label for="last">最後の生理はいつ始まった？</label>
+            <input id="last" type="date" aria-label="最後の生理開始日" />
           </div>
           <div class="field">
-            <label for="cycle">Average cycle length (days)</label>
-            <input id="cycle" type="number" min="15" max="45" value="28" aria-label="Cycle length" />
+            <label for="cycle">平均サイクル日数</label>
+            <input id="cycle" type="number" min="15" max="45" value="28" aria-label="サイクル日数" />
           </div>
           <div class="field">
-            <label for="periodLen">Average period length (days)</label>
-            <input id="periodLen" type="number" min="3" max="10" value="5" aria-label="Period length" />
+            <label for="periodLen">平均生理期間（日数）</label>
+            <input id="periodLen" type="number" min="3" max="10" value="5" aria-label="生理期間" />
           </div>
           <div class="controls">
-            <button class="btn-ghost" onclick="showStep('pcod')">← Back</button>
-            <button class="btn-primary" onclick="createCalendar()">Create my calendar</button>
+            <button class="btn-ghost" onclick="showStep('pcod')">← 戻る</button>
+            <button class="btn-primary" onclick="createCalendar()">カレンダーを作る</button>
           </div>
         </div>
       </section>
 
-      <!-- Step 4: calendar -->
+      <!-- ステップ4: カレンダー -->
       <section class="step" id="step-3">
-        <div class="step-indicator">Step 4 of 4</div>
+        <div class="step-indicator">ステップ 4 / 4</div>
         <div class="card">
           <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
             <div>
-              <div id="greeting" style="font-weight:800"></div>
+              <div id="greeting" style="font-weight:700"></div>
               <div style="font-size:13px;color:var(--muted)" id="age-note"></div>
             </div>
             <div style="text-align:right">
-              <div style="font-size:12px;color:var(--muted)">Predicted months: <span id="pred-count">0</span></div>
-              <div style="font-size:12px;color:var(--muted)">Visible: <span id="visible-month"></span></div>
+              <div style="font-size:12px;color:var(--muted)">予測月数: <span id="pred-count">0</span></div>
+              <div style="font-size:12px;color:var(--muted)">表示中: <span id="visible-month"></span></div>
             </div>
           </div>
           <div class="month-nav">
-            <button class="btn-ghost" aria-label="Previous month" id="prevBtn">←</button>
-            <div class="month-title" id="monthTitle">Month</div>
-            <button class="btn-ghost" aria-label="Next month" id="nextBtn">→</button>
+            <button class="btn-ghost" aria-label="前の月" id="prevBtn">←</button>
+            <div class="month-title" id="monthTitle">月</div>
+            <button class="btn-ghost" aria-label="次の月" id="nextBtn">→</button>
           </div>
           <div class="grid" id="weekdayLabels" style="grid-template-columns: repeat(7, 1fr);">
-            <div class="weekday-label">Sun</div>
-            <div class="weekday-label">Mon</div>
-            <div class="weekday-label">Tue</div>
-            <div class="weekday-label">Wed</div>
-            <div class="weekday-label">Thu</div>
-            <div class="weekday-label">Fri</div>
-            <div class="weekday-label">Sat</div>
+            <div class="weekday-label">日</div>
+            <div class="weekday-label">月</div>
+            <div class="weekday-label">火</div>
+            <div class="weekday-label">水</div>
+            <div class="weekday-label">木</div>
+            <div class="weekday-label">金</div>
+            <div class="weekday-label">土</div>
           </div>
-          <div class="grid" id="calendarGrid" role="grid" aria-label="Calendar grid"></div>
+          <div class="grid" id="calendarGrid" role="grid" aria-label="カレンダーグリッド"></div>
           <div class="legend">
-            <div style="display:flex;align-items:center;gap:8px"><div class="box period"></div> Period</div>
-            <div style="display:flex;align-items:center;gap:8px"><div class="box fertile"></div> Fertile</div>
+            <div style="display:flex;align-items:center;gap:8px"><div class="box period"></div> 生理</div>
+            <div style="display:flex;align-items:center;gap:8px"><div class="box fertile"></div> 排卵日</div>
           </div>
           <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
-            <button class="btn-ghost" onclick="showStep(2)">Update</button>
-            <button class="btn-primary" onclick="showResetModal()">Start Over</button>
+            <button class="btn-ghost" onclick="showStep(2)">更新</button>
+            <button class="btn-primary" onclick="showResetModal()">最初から</button>
           </div>
         </div>
-        <p style="margin-top:8px;font-size:13px;color:var(--muted)">⚠️ This is an open-source, student-built prototype for educational purposes. Predictions are estimates based on average cycle data and may vary due to factors like diet, hormonal changes, or stress. Not medically approved. <a href="https://github.com/alwin-m/ROS-Cycle-Project" class="github-link" target="_blank" rel="noopener" aria-label="Contribute to ROS Cycle on GitHub">Contribute to our GitHub</a> to help improve accuracy!</p>
+        <p style="margin-top:8px;font-size:12px;color:var(--muted)">⚠️ これは学生が作った教育目的のオープンソースプロトタイプです。予測は平均的なサイクルデータに基づく推定であり、食事、ストレス、ホルモンの変化などで変動する可能性があります。医療承認はされていません。<a href="https://github.com/alwin-m/ROS-Cycle-Project" class="github-link" target="_blank" rel="noopener" aria-label="ROSサイクルにGitHubで貢献">GitHubで貢献</a>して、精度を向上させましょう！</p>
       </section>
     </main>
 
     <footer>
       <div style="font-size:12px;color:var(--muted)">
-        Open-source • MIT License • <a href="https://github.com/alwin-m/ROS-Cycle-Project" class="github-link" target="_blank" rel="noopener" aria-label="Visit ROS Cycle GitHub repository">GitHub</a> • <a href="https://alwin-m.github.io/Portfolio/" class="portfolio-link" target="_blank" rel="noopener" aria-label="Visit Alwin Madhu's Portfolio">Portfolio</a>
+        オープンソース • MITライセンス • <a href="https://github.com/alwin-m/ROS-Cycle-Project" class="github-link" target="_blank" rel="noopener" aria-label="ROSサイクルのGitHubリポジトリを訪問">GitHub</a> • <a href="https://alwin-m.github.io/Portfolio/" class="portfolio-link" target="_blank" rel="noopener" aria-label="Alwin Madhuのポートフォリオを訪問">ポートフォリオ</a>
       </div>
       <div style="display:flex;gap:12px">
-        <div class="theme-toggle" onclick="toggleTheme()">Toggle Dark Mode</div>
-        <div style="font-size:12px;color:var(--muted)">Made for students • Privacy-first</div>
+        <div class="theme-toggle" onclick="toggleTheme()">ダークモードを切り替え</div>
+        <div style="font-size:12px;color:var(--muted)">学生のために • プライバシーを第一に</div>
       </div>
     </footer>
   </div>
 
-  <!-- modal for warnings/details -->
+  <!-- モーダル（警告/詳細） -->
   <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalText">
     <div class="box">
       <div id="modalText" role="alert"></div>
       <div style="text-align:right;margin-top:12px;display:flex;gap:10px;justify-content:flex-end">
         <button class="btn-ghost" onclick="closeModal()">OK</button>
-        <button class="btn-primary" onclick="closeModal()">Check My Periods</button>
+        <button class="btn-primary" onclick="closeModal()">生理を確認</button>
       </div>
     </div>
   </div>
 
-  <!-- reset confirmation modal -->
+  <!-- リセット確認モーダル -->
   <div class="modal" id="resetModal" role="dialog" aria-modal="true" aria-labelledby="resetModalText">
     <div class="box">
-      <div id="resetModalText">Start over? This will clear the current session.</div>
+      <div id="resetModalText">最初からやり直しますか？現在のセッションがクリアされます。</div>
       <div style="text-align:right;margin-top:12px">
-        <button class="btn-ghost" onclick="closeModal('resetModal')">Cancel</button>
-        <button class="btn-primary" onclick="resetAll()">Confirm</button>
+        <button class="btn-ghost" onclick="closeModal('resetModal')">キャンセル</button>
+        <button class="btn-primary" onclick="resetAll()">確認</button>
       </div>
     </div>
   </div>
 
-  <script>let state={name:'',dob:null,age:null,last:null,cycle:28,periodLen:5,months:[],visibleIndex:0,pcodChance:null,pcodSymptoms:[]};const el=id=>document.getElementById(id);function showStep(n){document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));if(typeof n==='string'){el('step-'+n).classList.add('active');}else{el('step-'+n).classList.add('active');}const firstInput=typeof n==='string'?el('step-'+n).querySelector('input, button'):el('step-'+n).querySelector('input, button');if(firstInput)firstInput.focus();}function showModal(msg){el('modalText').innerHTML=msg.replace(/\n\n/g,'<br><br>').replace(/https:\/\/github\.com\/alwin-m\/ROS-Cycle-Project/g,'<a href="https://github.com/alwin-m/ROS-Cycle-Project" class="github-link" target="_blank" rel="noopener" aria-label="Contribute to ROS Cycle on GitHub">GitHub</a>');el('modal').classList.add('active');el('modal').querySelector('.btn-ghost').focus();}function closeModal(id='modal'){el(id).classList.remove('active');if(id==='modal'&&document.querySelector('#step-pcod.active')){showStep(2);}}function showResetModal(){el('resetModal').classList.add('active');el('resetModal').querySelector('button').focus();}function resetAll(){state={name:'',dob:null,age:null,last:null,cycle:28,periodLen:5,months:[],visibleIndex:0,pcodChance:null,pcodSymptoms:[]};el('name').value='';el('dob').value='';el('last').value='';el('cycle').value='28';el('periodLen').value='5';el('calendarGrid').innerHTML='';el('monthTitle').innerText='Month';el('pcod-form').reset();closeModal('resetModal');showStep(1);}function skipInfo(){state.name='';state.dob=null;state.age=null;showStep(2);}function nextToStep2(){const name=el('name').value.trim();const dob=el('dob').value;if(name==='')return showModal('Please enter your name — a short nickname is fine.');state.name=name;if(dob){const parsed=new Date(dob);if(isNaN(parsed))return showModal('Invalid date of birth. Please use YYYY-MM-DD format.');const age=calculateAge(parsed);if(age<9||age>55){return showModal('Age appears to be ' + age + ', which is outside the typical range (9–55). If correct, proceed; otherwise, check your input.');}state.dob=parsed;state.age=age;}showStep(2);setTimeout(()=>el('last').focus(),200);}function nextToPCOD(){const name=el('name').value.trim();const dob=el('dob').value;if(name==='')return showModal('Please enter your name — a short nickname is fine.');state.name=name;if(dob){const parsed=new Date(dob);if(isNaN(parsed))return showModal('Invalid date of birth. Please use YYYY-MM-DD format.');const age=calculateAge(parsed);if(age<9||age>55){return showModal('Age appears to be ' + age + ', which is outside the typical range (9–55). If correct, proceed; otherwise, check your input.');}state.dob=parsed;state.age=age;}showStep('pcod');setTimeout(()=>el('symptom1').focus(),200);}function checkPCOD(){const symptoms=document.querySelectorAll('#pcod-form input[type="checkbox"]:checked');state.pcodSymptoms=Array.from(symptoms).map(s=>s.nextElementSibling.textContent);const count=symptoms.length;let chance='low';let message='';if(count<=2){chance='low';message=`Based on your responses, there is a low chance you have PCOD.`;}else if(count<=5){chance='medium';message=`Based on your responses, there is a medium chance you have PCOD. Consider seeing a doctor.`;}else{chance='high';message=`Based on your responses, there is a high chance you have PCOD. You should consider seeing a doctor for proper diagnosis.\n\n⚠️ Warning: PCOD can cause irregular cycles, which may reduce the accuracy of period predictions in this app. Predictions are estimates based on average cycle data and may vary due to factors like diet, stress, hormonal changes, or other influences. This is an open-source prototype, and we’re working to improve accuracy. Contribute to our https://github.com/alwin-m/ROS-Cycle-Project to help enhance features, like AI-driven predictions!`;}if(state.pcodSymptoms.length>0){message+=`<br><br><strong>Selected Symptoms:</strong><ul style="margin:10px 0;padding-left:20px;">${state.pcodSymptoms.map(s=>`<li>${s}</li>`).join('')}</ul>`;}else{message+=`<br><br>No symptoms selected.`;}message+=`<br>This is not a medical diagnosis—please consult a healthcare professional.`;state.pcodChance=chance;showModal(message);}function calculateAge(dob){const diff=Date.now()-dob.getTime();return Math.floor(diff/(1000*60*60*24*365.25));}function createCalendar(){const lastVal=el('last').value;const cycleVal=parseInt(el('cycle').value,10);const periodLenVal=parseInt(el('periodLen').value,10);if(!lastVal)return showModal('Please select your last period date.');if(isNaN(cycleVal)||cycleVal<15||cycleVal>45){return showModal('Cycle length should be between 15 and 45 days. If outside this range, consult a healthcare provider.');}if(isNaN(periodLenVal)||periodLenVal<3||periodLenVal>10){return showModal('Period length should be between 3 and 10 days.');}const last=new Date(lastVal);if(isNaN(last))return showModal('Invalid period start date. Please use YYYY-MM-DD format.');if(last>new Date())return showModal('Last period date cannot be in the future.');state.last=new Date(last.getFullYear(),last.getMonth(),last.getDate());state.cycle=cycleVal;state.periodLen=periodLenVal;state.months=[];state.visibleIndex=0;generateMonth(state.visibleIndex);renderMonth(state.visibleIndex);showStep(3);}function generateMonth(index){if(state.months[index])return;const start=new Date(state.last.getFullYear(),state.last.getMonth(),1);const oneDay=24*60*60*1000;const mm=new Date(start.getFullYear(),start.getMonth()+index,1);const days=new Date(mm.getFullYear(),mm.getMonth()+1,0).getDate();const monthObj={month:mm.getMonth(),year:mm.getFullYear(),days:[]};for(let d=1;d<=days;d++){const date=new Date(mm.getFullYear(),mm.getMonth(),d);const diffDays=Math.round((date-state.last)/oneDay);let type='normal';if(diffDays>=0){const mod=Math.abs(diffDays % state.cycle);if(mod<state.periodLen)type='period';const ovulationIndex=state.cycle-14;const fertileStart=ovulationIndex-5;if(mod>=fertileStart&&mod<=ovulationIndex)type=(type==='period')?'period':'fertile';}monthObj.days.push({date,type});}state.months[index]=monthObj;}function renderMonth(index){if(index<0||index>=12)return showModal('No prediction available for this month. We only predict 12 months.');generateMonth(index);const monthObj=state.months[index];el('monthTitle').innerText=`${getMonthName(monthObj.month)} ${monthObj.year}`;el('pred-count').innerText=12;el('visible-month').innerText=`${index + 1}/12`;el('greeting').innerText=`Hi ${state.name || 'there'} — your calendar:`;el('age-note').innerText=state.age ? `Age: ${state.age}${state.pcodChance ? `, PCOD Chance: ${state.pcodChance.charAt(0).toUpperCase() + state.pcodChance.slice(1)}` : ''}` : state.pcodChance ? `PCOD Chance: ${state.pcodChance.charAt(0).toUpperCase() + state.pcodChance.slice(1)}` : '';const grid=el('calendarGrid');grid.innerHTML='';const firstDay=new Date(monthObj.year, monthObj.month, 1);const startOffset=firstDay.getDay();const daysInMonth=monthObj.days.length;const totalCells=Math.ceil((startOffset + daysInMonth) / 7) * 7;for(let i=0;i<totalCells;i++){const cell=document.createElement('div');cell.className='cell';if(i<startOffset||i>=startOffset+daysInMonth){cell.className+=' other';cell.innerHTML=`<div class="daynum">-</div>`;}else{const dayIndex=i-startOffset;const day=monthObj.days[dayIndex];const dateStr=day.date.toISOString().split('T')[0];cell.innerHTML=`<div class="daynum">${day.date.getDate()}</div>`;if(day.type!=='normal'){cell.innerHTML+=`<div class="badge ${day.type}">${day.type==='period' ? 'Period' : 'Fertile'}</div>`;const tip=document.createElement('div');tip.className='tooltip';tip.innerText=`${day.type === 'period' ? 'Period' : 'Fertile'} day: ${dateStr}`;cell.appendChild(tip);}}cell.tabIndex=0;grid.appendChild(cell);}}function getMonthName(month){const names=['January','February','March','April','May','June','July','August','September','October','November','December'];return names[month];}function toggleTheme(){const isDark=document.documentElement.getAttribute('data-theme')==='dark';document.documentElement.setAttribute('data-theme',isDark ? 'light' : 'dark');localStorage.setItem('theme',isDark ? 'light' : 'dark');}el('prevBtn').addEventListener('click',()=>{state.visibleIndex = Math.max(0, state.visibleIndex - 1);renderMonth(state.visibleIndex);});el('nextBtn').addEventListener('click',()=>{state.visibleIndex = Math.min(11, state.visibleIndex + 1);renderMonth(state.visibleIndex);});function setMaxDates(){const today = new Date().toISOString().split('T')[0];el('dob').max=today;el('last').max=today;}document.addEventListener('keydown',(e)=>{if(e.key==='Escape'&&el('modal').classList.contains('active')){closeModal();}else if(e.key==='Escape'&&el('resetModal').classList.contains('active')){closeModal('resetModal');}});(function init(){const savedTheme=localStorage.getItem('theme')||'light';document.documentElement.setAttribute('data-theme',savedTheme);setMaxDates();el('name').focus();if('serviceWorker' in navigator){navigator.serviceWorker.register('serviceworker.js').then(()=>console.log('Service Worker registered successfully')).catch(err=>console.warn('Service Worker registration failed:',err.message));}else{console.warn('Service Worker not supported in this browser');}})();</script>
+  <script>
+    let state = {
+      name: '',
+      dob: null,
+      age: null,
+      last: null,
+      cycle: 28,
+      periodLen: 5,
+      months: [],
+      visibleIndex: 0,
+      pcodChance: null,
+      pcodSymptoms: []
+    };
+
+    const el = id => document.getElementById(id);
+
+    function formatDate(date) {
+      return new Intl.DateTimeFormat('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' }).format(date);
+    }
+
+    function showStep(n) {
+      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+      if (typeof n === 'string') {
+        el('step-' + n).classList.add('active');
+      } else {
+        el('step-' + n).classList.add('active');
+      }
+      const firstInput = typeof n === 'string' ? el('step-' + n).querySelector('input, button') : el('step-' + n).querySelector('input, button');
+      if (firstInput) firstInput.focus();
+    }
+
+    function showModal(msg) {
+      el('modalText').innerHTML = msg.replace(/\n\n/g, '<br><br>').replace(/https:\/\/github\.com\/alwin-m\/ROS-Cycle-Project/g, '<a href="https://github.com/alwin-m/ROS-Cycle-Project" class="github-link" target="_blank" rel="noopener" aria-label="ROSサイクルにGitHubで貢献">GitHub</a>');
+      el('modal').classList.add('active');
+      el('modal').querySelector('.btn-ghost').focus();
+    }
+
+    function closeModal(id = 'modal') {
+      el(id).classList.remove('active');
+      if (id === 'modal' && document.querySelector('#step-pcod.active')) {
+        showStep(2);
+      }
+    }
+
+    function showResetModal() {
+      el('resetModal').classList.add('active');
+      el('resetModal').querySelector('button').focus();
+    }
+
+    function resetAll() {
+      state = {
+        name: '',
+        dob: null,
+        age: null,
+        last: null,
+        cycle: 28,
+        periodLen: 5,
+        months: [],
+        visibleIndex: 0,
+        pcodChance: null,
+        pcodSymptoms: []
+      };
+      el('name').value = '';
+      el('dob').value = '';
+      el('last').value = '';
+      el('cycle').value = '28';
+      el('periodLen').value = '5';
+      el('calendarGrid').innerHTML = '';
+      el('monthTitle').innerText = '月';
+      el('pcod-form').reset();
+      closeModal('resetModal');
+      showStep(1);
+    }
+
+    function skipInfo() {
+      state.name = '';
+      state.dob = null;
+      state.age = null;
+      showStep(2);
+    }
+
+    function nextToStep2() {
+      const name = el('name').value.trim();
+      const dob = el('dob').value;
+      if (name === '') return showModal('お名前を入力してくださいね。ニックネームでも大丈夫！');
+      state.name = name;
+      if (dob) {
+        const parsed = new Date(dob);
+        if (isNaN(parsed)) return showModal('生年月日が正しくありません。YYYY-MM-DD形式で入力してくださいね。');
+        const age = calculateAge(parsed);
+        if (age < 9 || age > 55) {
+          return showModal(`年齢が${age}歳のようです。通常の範囲（9～55歳）外です。正しければ続けて、そうでなければ入力を確認してくださいね！`);
+        }
+        state.dob = parsed;
+        state.age = age;
+      }
+      showStep(2);
+      setTimeout(() => el('last').focus(), 200);
+    }
+
+    function nextToPCOD() {
+      const name = el('name').value.trim();
+      const dob = el('dob').value;
+      if (name === '') return showModal('お名前を入力してくださいね。ニックネームでも大丈夫！');
+      state.name = name;
+      if (dob) {
+        const parsed = new Date(dob);
+        if (isNaN(parsed)) return showModal('生年月日が正しくありません。YYYY-MM-DD形式で入力してくださいね。');
+        const age = calculateAge(parsed);
+        if (age < 9 || age > 55) {
+          return showModal(`年齢が${age}歳のようです。通常の範囲（9～55歳）外です。正しければ続けて、そうでなければ入力を確認してくださいね！`);
+        }
+        state.dob = parsed;
+        state.age = age;
+      }
+      showStep('pcod');
+      setTimeout(() => el('symptom1').focus(), 200);
+    }
+
+    function checkPCOD() {
+      const symptoms = document.querySelectorAll('#pcod-form input[type="checkbox"]:checked');
+      state.pcodSymptoms = Array.from(symptoms).map(s => s.nextElementSibling.textContent);
+      const count = symptoms.length;
+      let chance = 'low';
+      let message = '';
+      if (count <= 2) {
+        chance = '低';
+        message = `回答に基づくと、多嚢胞性卵巣症候群（PCOS）の可能性は低いです。`;
+      } else if (count <= 5) {
+        chance = '中';
+        message = `回答に基づくと、多嚢胞性卵巣症候群（PCOS）の可能性は中程度です。お医者さんに相談することをおすすめします。`;
+      } else {
+        chance = '高';
+        message = `回答に基づくと、多嚢胞性卵巣症候群（PCOS）の可能性が高いです。正確な診断のため、ぜひお医者さんに相談してくださいね。\n\n⚠️ 注意：PCOSは生理周期の不規則を引き起こす可能性があり、このアプリの予測精度に影響を与えることがあります。予測は平均的なサイクルデータに基づく推定であり、食事、ストレス、ホルモンの変化などで変動する可能性があります。これはオープンソースのプロトタイプで、精度向上に取り組んでいます。<a href="https://github.com/alwin-m/ROS-Cycle-Project" class="github-link" target="_blank" rel="noopener" aria-label="ROSサイクルにGitHubで貢献">GitHub</a>で貢献して、AI駆動の予測など機能を改善しましょう！`;
+      }
+      if (state.pcodSymptoms.length > 0) {
+        message += `<br><br><strong>選択した症状：</strong><ul style="margin:10px 0;padding-left:20px;">${state.pcodSymptoms.map(s => `<li>${s}</li>`).join('')}</ul>`;
+      } else {
+        message += `<br><br>症状は選択されていません。`;
+      }
+      message += `<br>これは医療診断ではありません。必ず医療専門家に相談してくださいね。`;
+      state.pcodChance = chance;
+      showModal(message);
+    }
+
+    function calculateAge(dob) {
+      const diff = Date.now() - dob.getTime();
+      return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+    }
+
+    function createCalendar() {
+      const lastVal = el('last').value;
+      const cycleVal = parseInt(el('cycle').value, 10);
+      const periodLenVal = parseInt(el('periodLen').value, 10);
+      if (!lastVal) return showModal('最後の生理開始日を選んでくださいね。');
+      if (isNaN(cycleVal) || cycleVal < 15 || cycleVal > 45) {
+        return showModal('サイクル日数は15～45日の間でお願いします。範囲外の場合は、医療専門家に相談してくださいね。');
+      }
+      if (isNaN(periodLenVal) || periodLenVal < 3 || periodLenVal > 10) {
+        return showModal('生理期間は3～10日の間でお願いします。');
+      }
+      const last = new Date(lastVal);
+      if (isNaN(last)) return showModal('生理開始日の形式が正しくありません。YYYY-MM-DD形式で入力してくださいね。');
+      if (last > new Date()) return showModal('最後の生理開始日は未来の日付にできません。');
+      state.last = new Date(last.getFullYear(), last.getMonth(), last.getDate());
+      state.cycle = cycleVal;
+      state.periodLen = periodLenVal;
+      state.months = [];
+      state.visibleIndex = 0;
+      generateMonth(state.visibleIndex);
+      renderMonth(state.visibleIndex);
+      showStep(3);
+    }
+
+    function generateMonth(index) {
+      if (state.months[index]) return;
+      const start = new Date(state.last.getFullYear(), state.last.getMonth(), 1);
+      const oneDay = 24 * 60 * 60 * 1000;
+      const mm = new Date(start.getFullYear(), start.getMonth() + index, 1);
+      const days = new Date(mm.getFullYear(), mm.getMonth() + 1, 0).getDate();
+      const monthObj = { month: mm.getMonth(), year: mm.getFullYear(), days: [] };
+      for (let d = 1; d <= days; d++) {
+        const date = new Date(mm.getFullYear(), mm.getMonth(), d);
+        const diffDays = Math.round((date - state.last) / oneDay);
+        let type = 'normal';
+        if (diffDays >= 0) {
+          const mod = Math.abs(diffDays % state.cycle);
+          if (mod < state.periodLen) type = 'period';
+          const ovulationIndex = state.cycle - 14;
+          const fertileStart = ovulationIndex - 5;
+          if (mod >= fertileStart && mod <= ovulationIndex) type = (type === 'period') ? 'period' : 'fertile';
+        }
+        monthObj.days.push({ date, type });
+      }
+      state.months[index] = monthObj;
+    }
+
+    function renderMonth(index) {
+      if (index < 0 || index >= 12) return showModal('この月の予測はできません。12ヶ月のみ予測します。');
+      generateMonth(index);
+      const monthObj = state.months[index];
+      el('monthTitle').innerText = `${getMonthName(monthObj.month)} ${monthObj.year}`;
+      el('pred-count').innerText = 12;
+      el('visible-month').innerText = `${index + 1}/12`;
+      el('greeting').innerText = `こんにちは、${state.name || 'あなた'}ちゃん！カレンダーだよ：`;
+      el('age-note').innerText = state.age ? `年齢：${state.age}歳${state.pcodChance ? `、PCOS可能性：${state.pcodChance}` : ''}` : state.pcodChance ? `PCOS可能性：${state.pcodChance}` : '';
+      const grid = el('calendarGrid');
+      grid.innerHTML = '';
+      const firstDay = new Date(monthObj.year, monthObj.month, 1);
+      const startOffset = firstDay.getDay();
+      const daysInMonth = monthObj.days.length;
+      const totalCells = Math.ceil((startOffset + daysInMonth) / 7) * 7;
+      for (let i = 0; i < totalCells; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        if (i < startOffset || i >= startOffset + daysInMonth) {
+          cell.className += ' other';
+          cell.innerHTML = `<div class="daynum">-</div>`;
+        } else {
+          const dayIndex = i - startOffset;
+          const day = monthObj.days[dayIndex];
+          const dateStr = formatDate(day.date);
+          cell.innerHTML = `<div class="daynum">${day.date.getDate()}</div>`;
+          if (day.type !== 'normal') {
+            cell.innerHTML += `<div class="badge ${day.type}">${day.type === 'period' ? '生理' : '排卵日'}</div>`;
+            const tip = document.createElement('div');
+            tip.className = 'tooltip';
+            tip.innerText = `${day.type === 'period' ? '生理の日' : '排卵日'}: ${dateStr}`;
+            cell.appendChild(tip);
+          }
+        }
+        cell.tabIndex = 0;
+        grid.appendChild(cell);
+      }
+    }
+
+    function getMonthName(month) {
+      const names = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+      return names[month];
+    }
+
+    function toggleTheme() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    }
+
+    el('prevBtn').addEventListener('click', () => {
+      state.visibleIndex = Math.max(0, state.visibleIndex - 1);
+      renderMonth(state.visibleIndex);
+    });
+
+    el('nextBtn').addEventListener('click', () => {
+      state.visibleIndex = Math.min(11, state.visibleIndex + 1);
+      renderMonth(state.visibleIndex);
+    });
+
+    function setMaxDates() {
+      const today = new Date().toISOString().split('T')[0];
+      el('dob').max = today;
+      el('last').max = today;
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && el('modal').classList.contains('active')) {
+        closeModal();
+      } else if (e.key === 'Escape' && el('resetModal').classList.contains('active')) {
+        closeModal('resetModal');
+      }
+    });
+
+    (function init() {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      setMaxDates();
+      el('name').focus();
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('serviceworker.js')
+          .then(() => console.log('サービスワーカーが正常に登録されました'))
+          .catch(err => console.warn('サービスワーカーの登録に失敗しました:', err.message));
+      } else {
+        console.warn('このブラウザではサービスワーカーがサポートされていません');
+      }
+    })();
+  </script>
 </body>
 </html>
