@@ -37,7 +37,63 @@ SOFTWARE.
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" as="style" />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet" async />
   <title>ROS Cycle — gentle period companion</title>
-  <style>:root{--bg1:#FFF0F5;--bg2:#F0FFF0;--pink:#FF6B9D;--soft:#FFB6C1;--mint:#98D8C8;--text:#3b3b3b;--muted:#8A8A8A;--card:#ffffff;--shadow:0 6px 24px rgba(0,0,0,0.08);--bg-dark:#2b2b2b;--card-dark:#3c3c3c;--text-dark:#f0f0f0;--muted-dark:#b0b0b0;}[data-theme="dark"]{--bg1:#2b2b2b;--bg2:#3c3c3c;--card:#3c3c3c;--text:#f0f0f0;--muted:#b0b0b0;}*{box-sizing:border-box;}html,body{height:100%;}body{font-family:'Nunito',system-ui,-apple-system,Segoe UI,Roboto;margin:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--bg1),var(--bg2));color:var(--text);padding:20px;overscroll-behavior:none;}.app{width:100%;max-width:760px;background:var(--card);border-radius:18px;box-shadow:var(--shadow);padding:20px;}header{display:flex;align-items:center;gap:16px;}.logo{font-size:28px;font-weight:800;background:linear-gradient(45deg,var(--pink),var(--soft));-webkit-background-clip:text;color:transparent;}.lead{color:var(--muted);font-weight:300;}.step-indicator{margin:10px 0;font-size:13px;color:var(--muted);text-align:center;}main{margin-top:14px;}.step{display:none;opacity:0;transform:translateY(12px);transition:all .28s ease;}.step.active{display:block;opacity:1;transform:translateY(0);}.card{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 4px 18px rgba(0,0,0,0.04);}.field{margin-bottom:12px;text-align:left;}label{display:block;font-weight:600;margin-bottom:6px;}input[type="text"],input[type="date"],input[type="number"]{width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid #f2dce4;background:var(--card);outline:none;color:var(--text);font-size:16px;-webkit-appearance:none;}input:focus{box-shadow:0 6px 20px rgba(255,107,157,0.12);border-color:var(--pink);}.controls{display:flex;gap:10px;justify-content:flex-end;margin-top:10px;}button{cursor:pointer;border:0;padding:10px 16px;border-radius:12px;font-weight:700;font-size:16px;touch-action:manipulation;}.btn-primary{background:linear-gradient(45deg,var(--pink),var(--soft));color:white;}.btn-ghost{background:transparent;color:var(--text);}.month-nav{display:flex;align-items:center;justify-content:space-between;margin:18px 0;}.month-title{font-weight:800;font-size:18px;}.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;}.weekday-label{text-align:center;font-size:12px;font-weight:600;color:var(--muted);padding:8px 0;}.cell{background:var(--card);border-radius:10px;padding:10px;min-height:56px;display:flex;align-items:flex-start;justify-content:center;flex-direction:column;border:1px solid #f4f4f4;position:relative;touch-action:manipulation;}.cell.other{background:#fafafa;color:#bbb;}.daynum{font-weight:700;}.badge{position:absolute;right:8px;top:8px;font-size:11px;padding:4px 6px;border-radius:8px;}.period{background:linear-gradient(45deg,var(--pink),#ff9bbf);color:#fff;}.fertile{background:linear-gradient(45deg,var(--mint),#dff6ee);color:var(--text);}.legend{display:flex;gap:12px;margin-top:10px;align-items:center;}.legend .box{width:14px;height:14px;border-radius:4px;}.tooltip{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:var(--card);border-radius:10px;padding:8px 10px;box-shadow:0 6px 20px rgba(0,0,0,0.12);white-space:nowrap;font-size:13px;color:var(--text);display:none;z-index:10;}.cell:hover .tooltip,.cell:focus-within .tooltip{display:block;}@media (max-width:768px){header{flex-direction:column;padding:12px 20px;}nav a{margin:8px;font-size:0.9rem;}.hero h1{font-size:2.2rem;}section{padding:80px 20px;}.loader h1{font-size:1.2rem;}.loader .spinner{width:14px;height:14px;}.tooltip{bottom:auto;top:100%;transform:translateX(-50%);white-space:normal;max-width:90vw;}.grid{gap:6px;}.cell{min-height:64px;}header{gap:10px;}}.modal{position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.45);display:flex;justify-content:center;align-items:center;z-index:60;display:none;}.modal.active{display:flex;}.modal .box{background:var(--card);padding:18px;border-radius:12px;max-width:420px;box-shadow:0 10px 40px rgba(0,0,0,0.18);width:90%;}footer{margin-top:16px;font-size:13px;color:var(--muted);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}.theme-toggle{font-size:12px;cursor:pointer;color:var(--pink);}.checkbox-field{display:flex;align-items:center;gap:8px;margin-bottom:8px;}.checkbox-field input[type="checkbox"]{width:18px;height:18px;accent-color:var(--pink);}a.github-link,a.portfolio-link{color:var(--pink);text-decoration:none;font-weight:600;}a.github-link:hover,a.portfolio-link:hover{text-decoration:underline;}</style>
+  <style>
+    :root{
+      --bg1:#FFF0F5;--bg2:#F0FFF0;--pink:#FF6B9D;--soft:#FFB6C1;--mint:#98D8C8;
+      --purple:#D8BFD8;--deep-purple:#BA55D3;--text:#3b3b3b;--muted:#8A8A8A;--card:#ffffff;
+      --shadow:0 6px 24px rgba(0,0,0,0.08);--bg-dark:#2b2b2b;--card-dark:#3c3c3c;--text-dark:#f0f0f0;--muted-dark:#b0b0b0;
+    }
+    [data-theme="dark"]{--bg1:#2b2b2b;--bg2:#3c3c3c;--card:#3c3c3c;--text:#f0f0f0;--muted:#b0b0b0;}
+    *{box-sizing:border-box;}html,body{height:100%;}
+    body{font-family:'Nunito',system-ui,-apple-system,Segoe UI,Roboto;margin:0;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,var(--bg1),var(--bg2));color:var(--text);padding:20px;overscroll-behavior:none;}
+    .app{width:100%;max-width:760px;background:var(--card);border-radius:18px;box-shadow:var(--shadow);padding:20px;}
+    header{display:flex;align-items:center;gap:16px;}
+    .logo{font-size:28px;font-weight:800;background:linear-gradient(45deg,var(--pink),var(--soft));-webkit-background-clip:text;color:transparent;}
+    .lead{color:var(--muted);font-weight:300;}
+    .step-indicator{margin:10px 0;font-size:13px;color:var(--muted);text-align:center;}
+    main{margin-top:14px;}
+    .step{display:none;opacity:0;transform:translateY(12px);transition:all .28s ease;}
+    .step.active{display:block;opacity:1;transform:translateY(0);}
+    .card{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 4px 18px rgba(0,0,0,0.04);}
+    .field{margin-bottom:12px;text-align:left;}
+    label{display:block;font-weight:600;margin-bottom:6px;}
+    input[type="text"],input[type="date"],input[type="number"]{width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid #f2dce4;
+    background:var(--card);outline:none;color:var(--text);font-size:16px;-webkit-appearance:none;}
+    input:focus{box-shadow:0 6px 20px rgba(255,107,157,0.12);border-color:var(--pink);}
+    .controls{display:flex;gap:10px;justify-content:flex-end;margin-top:10px;}
+    button{cursor:pointer;border:0;padding:10px 16px;border-radius:12px;font-weight:700;font-size:16px;touch-action:manipulation;}
+    .btn-primary{background:linear-gradient(45deg,var(--pink),var(--soft));color:white;}
+    .btn-ghost{background:transparent;color:var(--text);}
+    .month-nav{display:flex;align-items:center;justify-content:space-between;margin:18px 0;}
+    .month-title{font-weight:800;font-size:18px;}
+    .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;}
+    .weekday-label{text-align:center;font-size:12px;font-weight:600;color:var(--muted);padding:8px 0;}
+    .cell{background:var(--card);border-radius:10px;padding:10px;min-height:56px;display:flex;align-items:flex-start;justify-content:center;
+    flex-direction:column;border:1px solid #f4f4f4;position:relative;touch-action:manipulation;}
+    .cell.other{background:#fafafa;color:#bbb;}
+    .daynum{font-weight:700;}
+    .badge{position:absolute;right:8px;top:8px;font-size:11px;padding:4px 6px;border-radius:8px;}
+    .period{background:linear-gradient(45deg,var(--pink),#ff9bbf);color:#fff;}
+    .fertile{background:linear-gradient(45deg,var(--mint),#dff6ee);color:var(--text);}
+    .high-desire{background:linear-gradient(45deg,var(--purple),var(--deep-purple));color:#fff;}
+    .legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;align-items:center;}
+    .legend .box{width:14px;height:14px;border-radius:4px;}
+    .tooltip{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:var(--card);border-radius:10px;
+    padding:8px 10px;box-shadow:0 6px 20px rgba(0,0,0,0.12);white-space:nowrap;font-size:13px;color:var(--text);display:none;z-index:10;}
+    .cell:hover .tooltip,.cell:focus-within .tooltip{display:block;}
+    @media (max-width:768px){.tooltip{bottom:auto;top:100%;white-space:normal;max-width:90vw;}.grid{gap:6px;}.cell{min-height:64px;}}
+    .modal{position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.45);display:flex;justify-content:center;
+    align-items:center;z-index:60;display:none;}
+    .modal.active{display:flex;}
+    .modal .box{background:var(--card);padding:18px;border-radius:12px;max-width:420px;box-shadow:0 10px 40px rgba(0,0,0,0.18);width:90%;}
+    footer{margin-top:16px;font-size:13px;color:var(--muted);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+    .theme-toggle{font-size:12px;cursor:pointer;color:var(--pink);}
+    .checkbox-field{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+    .checkbox-field input[type="checkbox"]{width:18px;height:18px;accent-color:var(--pink);}
+    a.github-link,a.portfolio-link{color:var(--pink);text-decoration:none;font-weight:600;}
+    a.github-link:hover,a.portfolio-link:hover{text-decoration:underline;}
+  </style>
 </head>
 <body>
   <div class="app" role="application" aria-label="ROS Cycle period tracker">
@@ -48,9 +104,8 @@ SOFTWARE.
         <div style="font-size:12px;color:var(--muted)">No data stored. Local only for this demo.</div>
       </div>
     </header>
-
     <main aria-live="polite">
-      <!-- Step 1: basic info -->
+      <!-- Step 1 -->
       <section class="step active" id="step-1">
         <div class="step-indicator">Step 1 of 4</div>
         <div class="card">
@@ -58,70 +113,40 @@ SOFTWARE.
           <p style="margin:0 0 12px;color:var(--muted)">We will ask just a few friendly questions. You can go back anytime.</p>
           <div class="field">
             <label for="name">Name</label>
-            <input id="name" type="text" placeholder="How should I call you?" autocomplete="name" aria-label="Name" />
+            <input id="name" type="text" placeholder="How should I call you?" autocomplete="name" />
           </div>
           <div class="field">
             <label for="dob">Date of birth <span style="font-weight:400;color:var(--muted);font-size:13px">(used only for age guidance)</span></label>
-            <input id="dob" type="date" aria-label="Date of birth" />
+            <input id="dob" type="date" />
             <div style="font-size:12px;color:var(--muted);margin-top:6px">If you prefer, you can enter your age instead.</div>
           </div>
           <div class="controls" style="justify-content: space-between;">
             <button class="btn-ghost" onclick="skipInfo()">Skip</button>
             <div>
               <button class="btn-primary" onclick="nextToPCOD()" style="margin-right: 10px;">Check for PCOD</button>
-              <button class="btn-primary" onclick="nextToStep2()" id="step1-next">Continue</button>
+              <button class="btn-primary" onclick="nextToStep2()">Continue</button>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Step 2: PCOD Symptom Checker -->
+      <!-- Step PCOD -->
       <section class="step" id="step-pcod">
         <div class="step-indicator">Step 2 of 4</div>
         <div class="card">
           <h3 style="margin:0 0 8px">Check for Possible PCOD Symptoms</h3>
           <p style="margin:0 0 12px;color:var(--muted)">Answer these questions about common symptoms. This is not a medical diagnosis—consult a doctor for advice.</p>
-          <form id="pcod-form" role="form" aria-label="PCOD symptom checker">
-            <div class="checkbox-field">
-              <input type="checkbox" id="symptom1" aria-label="Irregular or missed periods" />
-              <label for="symptom1">Irregular or missed periods</label>
-            </div>
-            <div class="checkbox-field">
-              <input type="checkbox" id="symptom2" aria-label="Excess facial or body hair" />
-              <label for="symptom2">Excess facial or body hair</label>
-            </div>
-            <div class="checkbox-field">
-              <input type="checkbox" id="symptom3" aria-label="Acne or oily skin" />
-              <label for="symptom3">Acne or oily skin</label>
-            </div>
-            <div class="checkbox-field">
-              <input type="checkbox" id="symptom4" aria-label="Difficulty getting pregnant" />
-              <label for="symptom4">Difficulty getting pregnant</label>
-            </div>
-            <div class="checkbox-field">
-              <input type="checkbox" id="symptom5" aria-label="Weight gain or difficulty losing weight" />
-              <label for="symptom5">Weight gain or difficulty losing weight</label>
-            </div>
-            <div class="checkbox-field">
-              <input type="checkbox" id="symptom6" aria-label="Thinning hair on the scalp" />
-              <label for="symptom6">Thinning hair on the scalp</label>
-            </div>
-            <div class="checkbox-field">
-              <input type="checkbox" id="symptom7" aria-label="Darkening of skin" />
-              <label for="symptom7">Darkening of skin (e.g., neck, groin)</label>
-            </div>
-            <div class="checkbox-field">
-              <input type="checkbox" id="symptom8" aria-label="Skin tags" />
-              <label for="symptom8">Skin tags</label>
-            </div>
-            <div class="checkbox-field">
-              <input type="checkbox" id="symptom9" aria-label="Pelvic pain" />
-              <label for="symptom9">Pelvic pain</label>
-            </div>
-            <div class="checkbox-field">
-              <input type="checkbox" id="symptom10" aria-label="Fatigue or low energy" />
-              <label for="symptom10">Fatigue or low energy</label>
-            </div>
+          <form id="pcod-form">
+            <div class="checkbox-field"><input type="checkbox" id="symptom1"/><label for="symptom1">Irregular or missed periods</label></div>
+            <div class="checkbox-field"><input type="checkbox" id="symptom2"/><label for="symptom2">Excess facial or body hair</label></div>
+            <div class="checkbox-field"><input type="checkbox" id="symptom3"/><label for="symptom3">Acne or oily skin</label></div>
+            <div class="checkbox-field"><input type="checkbox" id="symptom4"/><label for="symptom4">Difficulty getting pregnant</label></div>
+            <div class="checkbox-field"><input type="checkbox" id="symptom5"/><label for="symptom5">Weight gain or difficulty losing weight</label></div>
+            <div class="checkbox-field"><input type="checkbox" id="symptom6"/><label for="symptom6">Thinning hair on the scalp</label></div>
+            <div class="checkbox-field"><input type="checkbox" id="symptom7"/><label for="symptom7">Darkening of skin (e.g., neck, groin)</label></div>
+            <div class="checkbox-field"><input type="checkbox" id="symptom8"/><label for="symptom8">Skin tags</label></div>
+            <div class="checkbox-field"><input type="checkbox" id="symptom9"/><label for="symptom9">Pelvic pain</label></div>
+            <div class="checkbox-field"><input type="checkbox" id="symptom10"/><label for="symptom10">Fatigue or low energy</label></div>
             <div class="controls">
               <button class="btn-ghost" onclick="showStep(1)">← Back</button>
               <button class="btn-primary" type="button" onclick="checkPCOD()">Submit</button>
@@ -130,7 +155,7 @@ SOFTWARE.
         </div>
       </section>
 
-      <!-- Step 3: period details -->
+      <!-- Step 2: Period details -->
       <section class="step" id="step-2">
         <div class="step-indicator">Step 3 of 4</div>
         <div class="card">
@@ -138,15 +163,15 @@ SOFTWARE.
           <p style="margin:0 0 12px;color:var(--muted)">Just one last step — this is used to create friendly estimates.</p>
           <div class="field">
             <label for="last">When did your last period start?</label>
-            <input id="last" type="date" aria-label="Last period date" />
+            <input id="last" type="date" />
           </div>
           <div class="field">
             <label for="cycle">Average cycle length (days)</label>
-            <input id="cycle" type="number" min="15" max="45" value="28" aria-label="Cycle length" />
+            <input id="cycle" type="number" min="15" max="45" value="28" />
           </div>
           <div class="field">
             <label for="periodLen">Average period length (days)</label>
-            <input id="periodLen" type="number" min="3" max="10" value="5" aria-label="Period length" />
+            <input id="periodLen" type="number" min="3" max="10" value="5" />
           </div>
           <div class="controls">
             <button class="btn-ghost" onclick="showStep('pcod')">← Back</button>
@@ -155,7 +180,7 @@ SOFTWARE.
         </div>
       </section>
 
-      <!-- Step 4: calendar -->
+      <!-- Step 3: Calendar -->
       <section class="step" id="step-3">
         <div class="step-indicator">Step 4 of 4</div>
         <div class="card">
@@ -165,41 +190,41 @@ SOFTWARE.
               <div style="font-size:13px;color:var(--muted)" id="age-note"></div>
             </div>
             <div style="text-align:right">
-              <div style="font-size:12px;color:var(--muted)">Predicted months: <span id="pred-count">0</span></div>
+              <div style="font-size:12px;color:var(--muted)">Predicted months: 12</div>
               <div style="font-size:12px;color:var(--muted)">Visible: <span id="visible-month"></span></div>
             </div>
           </div>
           <div class="month-nav">
-            <button class="btn-ghost" aria-label="Previous month" id="prevBtn">←</button>
+            <button class="btn-ghost" id="prevBtn">←</button>
             <div class="month-title" id="monthTitle">Month</div>
-            <button class="btn-ghost" aria-label="Next month" id="nextBtn">→</button>
+            <button class="btn-ghost" id="nextBtn">→</button>
           </div>
-          <div class="grid" id="weekdayLabels" style="grid-template-columns: repeat(7, 1fr);">
-            <div class="weekday-label">Sun</div>
-            <div class="weekday-label">Mon</div>
-            <div class="weekday-label">Tue</div>
-            <div class="weekday-label">Wed</div>
-            <div class="weekday-label">Thu</div>
-            <div class="weekday-label">Fri</div>
+          <div class="grid" id="weekdayLabels">
+            <div class="weekday-label">Sun</div><div class="weekday-label">Mon</div><div class="weekday-label">Tue</div>
+            <div class="weekday-label">Wed</div><div class="weekday-label">Thu</div><div class="weekday-label">Fri</div>
             <div class="weekday-label">Sat</div>
           </div>
-          <div class="grid" id="calendarGrid" role="grid" aria-label="Calendar grid"></div>
+          <div class="grid" id="calendarGrid" role="grid"></div>
           <div class="legend">
-            <div style="display:flex;align-items:center;gap:8px"><div class="box period"></div> Period</div>
-            <div style="display:flex;align-items:center;gap:8px"><div class="box fertile"></div> Fertile</div>
+            <div style="display:flex;align-items:center;gap:8px"><div class="box period" style="background:var(--pink)"></div> Period</div>
+            <div style="display:flex;align-items:center;gap:8px"><div class="box fertile" style="background:var(--mint)"></div> Fertile window</div>
+            <div style="display:flex;align-items:center;gap:8px"><div class="box high-desire" style="background:var(--purple)"></div> High Desire ✨</div>
           </div>
           <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
             <button class="btn-ghost" onclick="showStep(2)">Update</button>
             <button class="btn-primary" onclick="showResetModal()">Start Over</button>
           </div>
         </div>
-        <p style="margin-top:8px;font-size:13px;color:var(--muted)">⚠️ This is an open-source, student-built prototype for educational purposes. Predictions are estimates based on average cycle data and may vary due to factors like diet, hormonal changes, or stress. Not medically approved. <a href="https://github.com/alwin-m/ROS-Cycle-Project" class="github-link" target="_blank" rel="noopener" aria-label="Contribute to ROS Cycle on GitHub">Contribute to our GitHub</a> to help improve accuracy!</p>
+        <p style="margin-top:8px;font-size:13px;color:var(--muted)">
+          ⚠️ Predictions are estimates based on the standard rhythm method. High Desire marks peak libido days (around ovulation) when many experience higher desire, arousal & easier intimacy due to hormones — individual results vary. Not medical advice.
+          <a href="https://github.com/alwin-m/ROS-Cycle-Project" class="github-link" target="_blank" rel="noopener">Contribute on GitHub</a>
+        </p>
       </section>
     </main>
-
     <footer>
       <div style="font-size:12px;color:var(--muted)">
-        Open-source • MIT License • <a href="https://github.com/alwin-m/ROS-Cycle-Project" class="github-link" target="_blank" rel="noopener" aria-label="Visit ROS Cycle GitHub repository">GitHub</a> • <a href="https://alwin-m.github.io/Portfolio/" class="portfolio-link" target="_blank" rel="noopener" aria-label="Visit Alwin Madhu's Portfolio">Portfolio</a>
+        Open-source • MIT License • <a href="https://github.com/alwin-m/ROS-Cycle-Project" class="github-link" target="_blank" rel="noopener">GitHub</a> • 
+        <a href="https://alwin-m.github.io/Portfolio/" class="portfolio-link" target="_blank" rel="noopener">Portfolio</a>
       </div>
       <div style="display:flex;gap:12px">
         <div class="theme-toggle" onclick="toggleTheme()">Toggle Dark Mode</div>
@@ -208,21 +233,20 @@ SOFTWARE.
     </footer>
   </div>
 
-  <!-- modal for warnings/details -->
-  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalText">
+  <!-- Modals -->
+  <div class="modal" id="modal">
     <div class="box">
       <div id="modalText" role="alert"></div>
       <div style="text-align:right;margin-top:12px;display:flex;gap:10px;justify-content:flex-end">
         <button class="btn-ghost" onclick="closeModal()">OK</button>
-        <button class="btn-primary" onclick="closeModal()">Check My Periods</button>
+        <button class="btn-primary" onclick="closeModal()">Close</button>
       </div>
     </div>
   </div>
 
-  <!-- reset confirmation modal -->
-  <div class="modal" id="resetModal" role="dialog" aria-modal="true" aria-labelledby="resetModalText">
+  <div class="modal" id="resetModal">
     <div class="box">
-      <div id="resetModalText">Start over? This will clear the current session.</div>
+      <div>Start over? This will clear the current session.</div>
       <div style="text-align:right;margin-top:12px">
         <button class="btn-ghost" onclick="closeModal('resetModal')">Cancel</button>
         <button class="btn-primary" onclick="resetAll()">Confirm</button>
@@ -230,6 +254,215 @@ SOFTWARE.
     </div>
   </div>
 
-  <script>let state={name:'',dob:null,age:null,last:null,cycle:28,periodLen:5,months:[],visibleIndex:0,pcodChance:null,pcodSymptoms:[]};const el=id=>document.getElementById(id);function showStep(n){document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));if(typeof n==='string'){el('step-'+n).classList.add('active');}else{el('step-'+n).classList.add('active');}const firstInput=typeof n==='string'?el('step-'+n).querySelector('input, button'):el('step-'+n).querySelector('input, button');if(firstInput)firstInput.focus();}function showModal(msg){el('modalText').innerHTML=msg.replace(/\n\n/g,'<br><br>').replace(/https:\/\/github\.com\/alwin-m\/ROS-Cycle-Project/g,'<a href="https://github.com/alwin-m/ROS-Cycle-Project" class="github-link" target="_blank" rel="noopener" aria-label="Contribute to ROS Cycle on GitHub">GitHub</a>');el('modal').classList.add('active');el('modal').querySelector('.btn-ghost').focus();}function closeModal(id='modal'){el(id).classList.remove('active');if(id==='modal'&&document.querySelector('#step-pcod.active')){showStep(2);}}function showResetModal(){el('resetModal').classList.add('active');el('resetModal').querySelector('button').focus();}function resetAll(){state={name:'',dob:null,age:null,last:null,cycle:28,periodLen:5,months:[],visibleIndex:0,pcodChance:null,pcodSymptoms:[]};el('name').value='';el('dob').value='';el('last').value='';el('cycle').value='28';el('periodLen').value='5';el('calendarGrid').innerHTML='';el('monthTitle').innerText='Month';el('pcod-form').reset();closeModal('resetModal');showStep(1);}function skipInfo(){state.name='';state.dob=null;state.age=null;showStep(2);}function nextToStep2(){const name=el('name').value.trim();const dob=el('dob').value;if(name==='')return showModal('Please enter your name — a short nickname is fine.');state.name=name;if(dob){const parsed=new Date(dob);if(isNaN(parsed))return showModal('Invalid date of birth. Please use YYYY-MM-DD format.');const age=calculateAge(parsed);if(age<9||age>55){return showModal('Age appears to be ' + age + ', which is outside the typical range (9–55). If correct, proceed; otherwise, check your input.');}state.dob=parsed;state.age=age;}showStep(2);setTimeout(()=>el('last').focus(),200);}function nextToPCOD(){const name=el('name').value.trim();const dob=el('dob').value;if(name==='')return showModal('Please enter your name — a short nickname is fine.');state.name=name;if(dob){const parsed=new Date(dob);if(isNaN(parsed))return showModal('Invalid date of birth. Please use YYYY-MM-DD format.');const age=calculateAge(parsed);if(age<9||age>55){return showModal('Age appears to be ' + age + ', which is outside the typical range (9–55). If correct, proceed; otherwise, check your input.');}state.dob=parsed;state.age=age;}showStep('pcod');setTimeout(()=>el('symptom1').focus(),200);}function checkPCOD(){const symptoms=document.querySelectorAll('#pcod-form input[type="checkbox"]:checked');state.pcodSymptoms=Array.from(symptoms).map(s=>s.nextElementSibling.textContent);const count=symptoms.length;let chance='low';let message='';if(count<=2){chance='low';message=`Based on your responses, there is a low chance you have PCOD.`;}else if(count<=5){chance='medium';message=`Based on your responses, there is a medium chance you have PCOD. Consider seeing a doctor.`;}else{chance='high';message=`Based on your responses, there is a high chance you have PCOD. You should consider seeing a doctor for proper diagnosis.\n\n⚠️ Warning: PCOD can cause irregular cycles, which may reduce the accuracy of period predictions in this app. Predictions are estimates based on average cycle data and may vary due to factors like diet, stress, hormonal changes, or other influences. This is an open-source prototype, and we’re working to improve accuracy. Contribute to our https://github.com/alwin-m/ROS-Cycle-Project to help enhance features, like AI-driven predictions!`;}if(state.pcodSymptoms.length>0){message+=`<br><br><strong>Selected Symptoms:</strong><ul style="margin:10px 0;padding-left:20px;">${state.pcodSymptoms.map(s=>`<li>${s}</li>`).join('')}</ul>`;}else{message+=`<br><br>No symptoms selected.`;}message+=`<br>This is not a medical diagnosis—please consult a healthcare professional.`;state.pcodChance=chance;showModal(message);}function calculateAge(dob){const diff=Date.now()-dob.getTime();return Math.floor(diff/(1000*60*60*24*365.25));}function createCalendar(){const lastVal=el('last').value;const cycleVal=parseInt(el('cycle').value,10);const periodLenVal=parseInt(el('periodLen').value,10);if(!lastVal)return showModal('Please select your last period date.');if(isNaN(cycleVal)||cycleVal<15||cycleVal>45){return showModal('Cycle length should be between 15 and 45 days. If outside this range, consult a healthcare provider.');}if(isNaN(periodLenVal)||periodLenVal<3||periodLenVal>10){return showModal('Period length should be between 3 and 10 days.');}const last=new Date(lastVal);if(isNaN(last))return showModal('Invalid period start date. Please use YYYY-MM-DD format.');if(last>new Date())return showModal('Last period date cannot be in the future.');state.last=new Date(last.getFullYear(),last.getMonth(),last.getDate());state.cycle=cycleVal;state.periodLen=periodLenVal;state.months=[];state.visibleIndex=0;generateMonth(state.visibleIndex);renderMonth(state.visibleIndex);showStep(3);}function generateMonth(index){if(state.months[index])return;const start=new Date(state.last.getFullYear(),state.last.getMonth(),1);const oneDay=24*60*60*1000;const mm=new Date(start.getFullYear(),start.getMonth()+index,1);const days=new Date(mm.getFullYear(),mm.getMonth()+1,0).getDate();const monthObj={month:mm.getMonth(),year:mm.getFullYear(),days:[]};for(let d=1;d<=days;d++){const date=new Date(mm.getFullYear(),mm.getMonth(),d);const diffDays=Math.round((date-state.last)/oneDay);let type='normal';if(diffDays>=0){const mod=Math.abs(diffDays % state.cycle);if(mod<state.periodLen)type='period';const ovulationIndex=state.cycle-14;const fertileStart=ovulationIndex-5;if(mod>=fertileStart&&mod<=ovulationIndex)type=(type==='period')?'period':'fertile';}monthObj.days.push({date,type});}state.months[index]=monthObj;}function renderMonth(index){if(index<0||index>=12)return showModal('No prediction available for this month. We only predict 12 months.');generateMonth(index);const monthObj=state.months[index];el('monthTitle').innerText=`${getMonthName(monthObj.month)} ${monthObj.year}`;el('pred-count').innerText=12;el('visible-month').innerText=`${index + 1}/12`;el('greeting').innerText=`Hi ${state.name || 'there'} — your calendar:`;el('age-note').innerText=state.age ? `Age: ${state.age}${state.pcodChance ? `, PCOD Chance: ${state.pcodChance.charAt(0).toUpperCase() + state.pcodChance.slice(1)}` : ''}` : state.pcodChance ? `PCOD Chance: ${state.pcodChance.charAt(0).toUpperCase() + state.pcodChance.slice(1)}` : '';const grid=el('calendarGrid');grid.innerHTML='';const firstDay=new Date(monthObj.year, monthObj.month, 1);const startOffset=firstDay.getDay();const daysInMonth=monthObj.days.length;const totalCells=Math.ceil((startOffset + daysInMonth) / 7) * 7;for(let i=0;i<totalCells;i++){const cell=document.createElement('div');cell.className='cell';if(i<startOffset||i>=startOffset+daysInMonth){cell.className+=' other';cell.innerHTML=`<div class="daynum">-</div>`;}else{const dayIndex=i-startOffset;const day=monthObj.days[dayIndex];const dateStr=day.date.toISOString().split('T')[0];cell.innerHTML=`<div class="daynum">${day.date.getDate()}</div>`;if(day.type!=='normal'){cell.innerHTML+=`<div class="badge ${day.type}">${day.type==='period' ? 'Period' : 'Fertile'}</div>`;const tip=document.createElement('div');tip.className='tooltip';tip.innerText=`${day.type === 'period' ? 'Period' : 'Fertile'} day: ${dateStr}`;cell.appendChild(tip);}}cell.tabIndex=0;grid.appendChild(cell);}}function getMonthName(month){const names=['January','February','March','April','May','June','July','August','September','October','November','December'];return names[month];}function toggleTheme(){const isDark=document.documentElement.getAttribute('data-theme')==='dark';document.documentElement.setAttribute('data-theme',isDark ? 'light' : 'dark');localStorage.setItem('theme',isDark ? 'light' : 'dark');}el('prevBtn').addEventListener('click',()=>{state.visibleIndex = Math.max(0, state.visibleIndex - 1);renderMonth(state.visibleIndex);});el('nextBtn').addEventListener('click',()=>{state.visibleIndex = Math.min(11, state.visibleIndex + 1);renderMonth(state.visibleIndex);});function setMaxDates(){const today = new Date().toISOString().split('T')[0];el('dob').max=today;el('last').max=today;}document.addEventListener('keydown',(e)=>{if(e.key==='Escape'&&el('modal').classList.contains('active')){closeModal();}else if(e.key==='Escape'&&el('resetModal').classList.contains('active')){closeModal('resetModal');}});(function init(){const savedTheme=localStorage.getItem('theme')||'light';document.documentElement.setAttribute('data-theme',savedTheme);setMaxDates();el('name').focus();if('serviceWorker' in navigator){navigator.serviceWorker.register('serviceworker.js').then(()=>console.log('Service Worker registered successfully')).catch(err=>console.warn('Service Worker registration failed:',err.message));}else{console.warn('Service Worker not supported in this browser');}})();</script>
+  <script>
+    let state = {
+      name: '', dob: null, age: null, last: null, cycle: 28, periodLen: 5,
+      months: [], visibleIndex: 0, pcodChance: null, pcodSymptoms: []
+    };
+
+    const el = id => document.getElementById(id);
+
+    function showStep(n) {
+      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+      if (typeof n === 'string') el('step-' + n).classList.add('active');
+      else el('step-' + n).classList.add('active');
+      const first = (typeof n === 'string' ? el('step-' + n) : el('step-' + n)).querySelector('input, button');
+      if (first) first.focus();
+    }
+
+    function showModal(msg) {
+      el('modalText').innerHTML = msg.replace(/\n\n/g, '<br><br>');
+      el('modal').classList.add('active');
+    }
+
+    function closeModal(id = 'modal') {
+      el(id).classList.remove('active');
+    }
+
+    function showResetModal() {
+      el('resetModal').classList.add('active');
+    }
+
+    function resetAll() {
+      state = {name:'', dob:null, age:null, last:null, cycle:28, periodLen:5, months:[], visibleIndex:0, pcodChance:null, pcodSymptoms:[]};
+      ['name','dob','last','cycle','periodLen'].forEach(id => el(id).value = id==='cycle'?28:id==='periodLen'?5:'');
+      el('pcod-form').reset();
+      el('calendarGrid').innerHTML = '';
+      closeModal('resetModal');
+      showStep(1);
+    }
+
+    function skipInfo() { state.name = state.dob = state.age = null; showStep(2); }
+
+    function nextToStep2() {
+      const name = el('name').value.trim();
+      if (!name) return showModal('Please enter your name — a short nickname is fine.');
+      state.name = name;
+      const dob = el('dob').value;
+      if (dob) {
+        const parsed = new Date(dob);
+        const age = calculateAge(parsed);
+        if (age < 9 || age > 55) showModal(`Age appears to be ${age} — outside typical range (9–55). Proceed if correct.`);
+        state.dob = parsed; state.age = age;
+      }
+      showStep(2);
+    }
+
+    function nextToPCOD() {
+      nextToStep2(); // reuse validation
+      showStep('pcod');
+    }
+
+    function checkPCOD() {
+      const checked = document.querySelectorAll('#pcod-form input:checked');
+      state.pcodSymptoms = Array.from(checked).map(c => c.nextElementSibling.textContent);
+      const count = checked.length;
+      let chance = 'low', msg = '';
+      if (count <= 2) msg = 'Low chance of PCOD.';
+      else if (count <= 5) { chance = 'medium'; msg = 'Medium chance — consider consulting a doctor.'; }
+      else { chance = 'high'; msg = 'High chance — please see a doctor for proper diagnosis.<br><br>⚠️ PCOD may cause irregular cycles, affecting prediction accuracy.'; }
+      if (state.pcodSymptoms.length) msg += `<br><br><strong>Symptoms:</strong><ul style="margin:8px 0;padding-left:20px">${state.pcodSymptoms.map(s=>`<li>${s}</li>`).join('')}</ul>`;
+      msg += '<br><br>This is <strong>not</strong> a diagnosis.';
+      state.pcodChance = chance;
+      showModal(msg);
+    }
+
+    function calculateAge(dob) {
+      const today = new Date();
+      let age = today.getFullYear() - dob.getFullYear();
+      const m = today.getMonth() - dob.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
+      return age;
+    }
+
+    function getDayType(targetDate, lastPeriodDate, cycleLength, periodLength) {
+      const daysSinceLast = Math.floor((targetDate - lastPeriodDate) / (24*60*60*1000));
+      if (daysSinceLast < 0) return 'past';
+      const dayInCycle = daysSinceLast % cycleLength;
+
+      if (dayInCycle < periodLength) return 'period';
+
+      const ovulationDay = cycleLength - 14;
+      const fertileStart = ovulationDay - 5;
+      const fertileEnd = ovulationDay + 1;
+
+      if (dayInCycle >= fertileStart && dayInCycle <= fertileEnd) {
+        return 'high-desire'; // High Desire = fertile window
+      }
+
+      if (dayInCycle >= fertileStart && dayInCycle <= fertileEnd) return 'fertile'; // kept for completeness, but overridden by high-desire above
+
+      return 'normal';
+    }
+
+    function generateMonthsAhead(count = 12) {
+      state.months = [];
+      const base = new Date(state.last.getFullYear(), state.last.getMonth(), 1);
+      for (let i = 0; i < count; i++) {
+        const monthDate = new Date(base.getFullYear(), base.getMonth() + i, 1);
+        const daysInMonth = new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0).getDate();
+        const monthObj = { month: monthDate.getMonth(), year: monthDate.getFullYear(), days: [] };
+        for (let d = 1; d <= daysInMonth; d++) {
+          const date = new Date(monthDate.getFullYear(), monthDate.getMonth(), d);
+          const type = getDayType(date, state.last, state.cycle, state.periodLen);
+          monthObj.days.push({ date, type });
+        }
+        state.months.push(monthObj);
+      }
+    }
+
+    function renderMonth(index) {
+      if (index < 0 || index >= 12) return;
+      const month = state.months[index];
+      el('monthTitle').innerText = `${['January','February','March','April','May','June','July','August','September','October','November','December'][month.month]} ${month.year}`;
+      el('visible-month').innerText = `${index + 1}/12`;
+
+      const nextPeriod = new Date(state.last);
+      nextPeriod.setDate(nextPeriod.getDate() + state.cycle);
+      el('greeting').innerHTML = `Hi ${state.name || 'there'}!<br><small>Next period around: ${nextPeriod.toLocaleDateString(undefined, {weekday:'long', year:'numeric', month:'long', day:'numeric'})}</small>`;
+
+      let note = '';
+      if (state.age) note += `Age: ${state.age}`;
+      if (state.pcodChance) note += (note ? ' • ' : '') + `PCOD chance: ${state.pcodChance.charAt(0).toUpperCase() + state.pcodChance.slice(1)}`;
+      el('age-note').innerText = note;
+
+      const grid = el('calendarGrid');
+      grid.innerHTML = '';
+      const firstDay = new Date(month.year, month.month, 1).getDay();
+      const totalCells = Math.ceil((firstDay + month.days.length) / 7) * 7;
+
+      for (let i = 0; i < totalCells; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        cell.tabIndex = 0;
+        if (i < firstDay || i >= firstDay + month.days.length) {
+          cell.className += ' other';
+          cell.innerHTML = `<div class="daynum">-</div>`;
+        } else {
+          const day = month.days[i - firstDay];
+          const dateStr = day.date.toLocaleDateString();
+          cell.innerHTML = `<div class="daynum">${day.date.getDate()}</div>`;
+          let badgeText = '', tooltipText = '';
+          if (day.type === 'period') {
+            badgeText = 'Period'; tooltipText = `Period day • ${dateStr}`;
+            cell.innerHTML += `<div class="badge period">${badgeText}</div>`;
+          } else if (day.type === 'high-desire') {
+            badgeText = 'High Desire ✨'; tooltipText = `Peak libido & intimacy • Higher desire, arousal & sensitivity • ${dateStr}`;
+            cell.innerHTML += `<div class="badge high-desire">${badgeText}</div>`;
+          } else if (day.type === 'fertile') {
+            badgeText = 'Fertile'; tooltipText = `Fertile window • ${dateStr}`;
+            cell.innerHTML += `<div class="badge fertile">${badgeText}</div>`;
+          }
+          if (tooltipText) {
+            const tip = document.createElement('div');
+            tip.className = 'tooltip';
+            tip.innerText = tooltipText;
+            cell.appendChild(tip);
+          }
+        }
+        grid.appendChild(cell);
+      }
+    }
+
+    function createCalendar() {
+      const lastVal = el('last').value;
+      const cycle = parseInt(el('cycle').value, 10);
+      const periodLen = parseInt(el('periodLen').value, 10);
+      if (!lastVal || isNaN(cycle) || cycle < 15 || cycle > 45 || isNaN(periodLen) || periodLen < 3 || periodLen > 10 || new Date(lastVal) > new Date()) {
+        showModal('Please check your inputs: valid last period date, cycle 15–45 days, period 3–10 days.');
+        return;
+      }
+      state.last = new Date(lastVal);
+      state.cycle = cycle;
+      state.periodLen = periodLen;
+      generateMonthsAhead(12);
+      state.visibleIndex = 0;
+      renderMonth(0);
+      showStep(3);
+    }
+
+    el('prevBtn').onclick = () => { state.visibleIndex = Math.max(0, state.visibleIndex - 1); renderMonth(state.visibleIndex); };
+    el('nextBtn').onclick = () => { state.visibleIndex = Math.min(11, state.visibleIndex + 1); renderMonth(state.visibleIndex); };
+
+    function toggleTheme() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    }
+
+    (function() {
+      document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+      const today = new Date().toISOString().split('T')[0];
+      el('dob').max = today; el('last').max = today;
+      el('name').focus();
+    })();
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        if (el('modal').classList.contains('active')) closeModal();
+        if (el('resetModal').classList.contains('active')) closeModal('resetModal');
+      }
+    });
+  </script>
 </body>
 </html>
