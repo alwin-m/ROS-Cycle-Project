@@ -103,6 +103,7 @@ SOFTWARE.
         <div style="font-size:12px;color:var(--muted)">No data stored. Local only for this demo.</div>
       </div>
     </header>
+
     <main aria-live="polite">
       <!-- Step 1 -->
       <section class="step active" id="step-1">
@@ -128,6 +129,7 @@ SOFTWARE.
           </div>
         </div>
       </section>
+
       <!-- Step PCOD -->
       <section class="step" id="step-pcod">
         <div class="step-indicator">Step 2 of 4</div>
@@ -152,6 +154,7 @@ SOFTWARE.
           </form>
         </div>
       </section>
+
       <!-- Step 2: Period details -->
       <section class="step" id="step-2">
         <div class="step-indicator">Step 3 of 4</div>
@@ -180,6 +183,7 @@ SOFTWARE.
           </div>
         </div>
       </section>
+
       <!-- Step 3: Calendar -->
       <section class="step" id="step-3">
         <div class="step-indicator">Step 4 of 4</div>
@@ -222,6 +226,7 @@ SOFTWARE.
         </p>
       </section>
     </main>
+
     <footer>
       <div style="font-size:12px;color:var(--muted)">
         Open-source • MIT License • <a href="https://github.com/alwin-m/ROS-Cycle-Project" class="github-link" target="_blank" rel="noopener">GitHub</a> •
@@ -233,6 +238,7 @@ SOFTWARE.
       </div>
     </footer>
   </div>
+
   <!-- Modals -->
   <div class="modal" id="modal">
     <div class="box">
@@ -243,6 +249,7 @@ SOFTWARE.
       </div>
     </div>
   </div>
+
   <div class="modal" id="resetModal">
     <div class="box">
       <div>Start over? This will clear the current session.</div>
@@ -252,12 +259,15 @@ SOFTWARE.
       </div>
     </div>
   </div>
+
   <script>
     let state = {
       name: '', dob: null, age: null, last: null, cycle: 28, periodLen: 5, sigma: 2,
       months: [], visibleIndex: 0, pcodChance: null, pcodSymptoms: []
     };
+
     const el = id => document.getElementById(id);
+
     function showStep(n) {
       document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
       if (typeof n === 'string') el('step-' + n).classList.add('active');
@@ -265,25 +275,36 @@ SOFTWARE.
       const first = (typeof n === 'string' ? el('step-' + n) : el('step-' + n)).querySelector('input, button');
       if (first) first.focus();
     }
+
     function showModal(msg) {
       el('modalText').innerHTML = msg.replace(/\n\n/g, '<br><br>');
       el('modal').classList.add('active');
     }
+
     function closeModal(id = 'modal') {
       el(id).classList.remove('active');
     }
+
     function showResetModal() {
       el('resetModal').classList.add('active');
     }
+
     function resetAll() {
       state = {name:'', dob:null, age:null, last:null, cycle:28, periodLen:5, sigma:2, months:[], visibleIndex:0, pcodChance:null, pcodSymptoms:[]};
-      ['name','dob','last','cycle','periodLen','variability'].forEach(id => el(id).value = id==='cycle'?28:id==='periodLen'?5:id==='variability'?2:'');
+      ['name','dob','last','cycle','periodLen','variability'].forEach(id => 
+        el(id).value = id==='cycle'?28:id==='periodLen'?5:id==='variability'?2:''
+      );
       el('pcod-form').reset();
       el('calendarGrid').innerHTML = '';
       closeModal('resetModal');
       showStep(1);
     }
-    function skipInfo() { state.name = state.dob = state.age = null; showStep(2); }
+
+    function skipInfo() { 
+      state.name = state.dob = state.age = null; 
+      showStep(2); 
+    }
+
     function nextToStep2() {
       const name = el('name').value.trim();
       if (!name) return showModal('Please enter your name — a short nickname is fine.');
@@ -297,10 +318,12 @@ SOFTWARE.
       }
       showStep(2);
     }
+
     function nextToPCOD() {
-      nextToStep2(); // reuse validation
+      nextToStep2();
       showStep('pcod');
     }
+
     function checkPCOD() {
       const checked = document.querySelectorAll('#pcod-form input:checked');
       state.pcodSymptoms = Array.from(checked).map(c => c.nextElementSibling.textContent);
@@ -314,6 +337,7 @@ SOFTWARE.
       state.pcodChance = chance;
       showModal(msg);
     }
+
     function calculateAge(dob) {
       const today = new Date();
       let age = today.getFullYear() - dob.getFullYear();
@@ -321,6 +345,7 @@ SOFTWARE.
       if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
       return age;
     }
+
     function getDayDetails(targetDate, lastPeriodDate, cycleLength, periodLength, sigma) {
       const daysSinceLast = Math.floor((targetDate - lastPeriodDate) / (24*60*60*1000));
       if (daysSinceLast < 0) return { type: 'past', phase: 'unknown', pov: 0, fertility: 'low' };
@@ -343,6 +368,7 @@ SOFTWARE.
       else if (fertility === 'medium') type = 'fertile';
       return { type, phase, pov, fertility };
     }
+
     function generateMonthsAhead(count = 12) {
       state.months = [];
       const base = new Date(state.last.getFullYear(), state.last.getMonth(), 1);
@@ -358,6 +384,7 @@ SOFTWARE.
         state.months.push(monthObj);
       }
     }
+
     function renderMonth(index) {
       if (index < 0 || index >= 12) return;
       const month = state.months[index];
@@ -408,6 +435,7 @@ SOFTWARE.
         grid.appendChild(cell);
       }
     }
+
     function createCalendar() {
       const lastVal = el('last').value;
       const cycle = parseInt(el('cycle').value, 10);
@@ -426,19 +454,30 @@ SOFTWARE.
       renderMonth(0);
       showStep(3);
     }
-    el('prevBtn').onclick = () => { state.visibleIndex = Math.max(0, state.visibleIndex - 1); renderMonth(state.visibleIndex); };
-    el('nextBtn').onclick = () => { state.visibleIndex = Math.min(11, state.visibleIndex + 1); renderMonth(state.visibleIndex); };
+
+    el('prevBtn').onclick = () => { 
+      state.visibleIndex = Math.max(0, state.visibleIndex - 1); 
+      renderMonth(state.visibleIndex); 
+    };
+    el('nextBtn').onclick = () => { 
+      state.visibleIndex = Math.min(11, state.visibleIndex + 1); 
+      renderMonth(state.visibleIndex); 
+    };
+
     function toggleTheme() {
       const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
       document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
       localStorage.setItem('theme', isDark ? 'light' : 'dark');
     }
+
     (function() {
       document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
       const today = new Date().toISOString().split('T')[0];
-      el('dob').max = today; el('last').max = today;
+      el('dob').max = today; 
+      el('last').max = today;
       el('name').focus();
     })();
+
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') {
         if (el('modal').classList.contains('active')) closeModal();
