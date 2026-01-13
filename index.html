@@ -21,7 +21,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -129,7 +128,6 @@ SOFTWARE.
           </div>
         </div>
       </section>
-
       <!-- Step PCOD -->
       <section class="step" id="step-pcod">
         <div class="step-indicator">Step 2 of 4</div>
@@ -154,7 +152,6 @@ SOFTWARE.
           </form>
         </div>
       </section>
-
       <!-- Step 2: Period details -->
       <section class="step" id="step-2">
         <div class="step-indicator">Step 3 of 4</div>
@@ -173,13 +170,16 @@ SOFTWARE.
             <label for="periodLen">Average period length (days)</label>
             <input id="periodLen" type="number" min="3" max="10" value="5" />
           </div>
+          <div class="field">
+            <label for="variability">Cycle variability (± days) <span style="font-weight:400;color:var(--muted);font-size:13px">(optional, for better accuracy)</span></label>
+            <input id="variability" type="number" min="0" max="10" value="2" />
+          </div>
           <div class="controls">
             <button class="btn-ghost" onclick="showStep('pcod')">← Back</button>
             <button class="btn-primary" onclick="createCalendar()">Create my calendar</button>
           </div>
         </div>
       </section>
-
       <!-- Step 3: Calendar -->
       <section class="step" id="step-3">
         <div class="step-indicator">Step 4 of 4</div>
@@ -188,6 +188,7 @@ SOFTWARE.
             <div>
               <div id="greeting" style="font-weight:800"></div>
               <div style="font-size:13px;color:var(--muted)" id="age-note"></div>
+              <div style="font-size:13px;color:var(--muted)" id="confidence-note"></div>
             </div>
             <div style="text-align:right">
               <div style="font-size:12px;color:var(--muted)">Predicted months: 12</div>
@@ -207,8 +208,8 @@ SOFTWARE.
           <div class="grid" id="calendarGrid" role="grid"></div>
           <div class="legend">
             <div style="display:flex;align-items:center;gap:8px"><div class="box period" style="background:var(--pink)"></div> Period</div>
-            <div style="display:flex;align-items:center;gap:8px"><div class="box fertile" style="background:var(--mint)"></div> Fertile window</div>
-            <div style="display:flex;align-items:center;gap:8px"><div class="box high-desire" style="background:var(--purple)"></div> High Desire ✨</div>
+            <div style="display:flex;align-items:center;gap:8px"><div class="box fertile" style="background:var(--mint)"></div> Medium Fertility</div>
+            <div style="display:flex;align-items:center;gap:8px"><div class="box high-desire" style="background:var(--purple)"></div> High Fertility & Desire ✨</div>
           </div>
           <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
             <button class="btn-ghost" onclick="showStep(2)">Update</button>
@@ -216,14 +217,14 @@ SOFTWARE.
           </div>
         </div>
         <p style="margin-top:8px;font-size:13px;color:var(--muted)">
-          ⚠️ Predictions are estimates based on the standard rhythm method. High Desire marks peak libido days (around ovulation) when many experience higher desire, arousal & easier intimacy due to hormones — individual results vary. Not medical advice.
+          ⚠️ Predictions are estimates based on the standard rhythm method. High Fertility & Desire marks peak days (around ovulation) when many experience higher desire, arousal & easier intimacy due to hormones — individual results vary. Not medical advice.
           <a href="https://github.com/alwin-m/ROS-Cycle-Project" class="github-link" target="_blank" rel="noopener">Contribute on GitHub</a>
         </p>
       </section>
     </main>
     <footer>
       <div style="font-size:12px;color:var(--muted)">
-        Open-source • MIT License • <a href="https://github.com/alwin-m/ROS-Cycle-Project" class="github-link" target="_blank" rel="noopener">GitHub</a> • 
+        Open-source • MIT License • <a href="https://github.com/alwin-m/ROS-Cycle-Project" class="github-link" target="_blank" rel="noopener">GitHub</a> •
         <a href="https://alwin-m.github.io/Portfolio/" class="portfolio-link" target="_blank" rel="noopener">Portfolio</a>
       </div>
       <div style="display:flex;gap:12px">
@@ -232,7 +233,6 @@ SOFTWARE.
       </div>
     </footer>
   </div>
-
   <!-- Modals -->
   <div class="modal" id="modal">
     <div class="box">
@@ -243,7 +243,6 @@ SOFTWARE.
       </div>
     </div>
   </div>
-
   <div class="modal" id="resetModal">
     <div class="box">
       <div>Start over? This will clear the current session.</div>
@@ -253,15 +252,12 @@ SOFTWARE.
       </div>
     </div>
   </div>
-
   <script>
     let state = {
-      name: '', dob: null, age: null, last: null, cycle: 28, periodLen: 5,
+      name: '', dob: null, age: null, last: null, cycle: 28, periodLen: 5, sigma: 2,
       months: [], visibleIndex: 0, pcodChance: null, pcodSymptoms: []
     };
-
     const el = id => document.getElementById(id);
-
     function showStep(n) {
       document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
       if (typeof n === 'string') el('step-' + n).classList.add('active');
@@ -269,31 +265,25 @@ SOFTWARE.
       const first = (typeof n === 'string' ? el('step-' + n) : el('step-' + n)).querySelector('input, button');
       if (first) first.focus();
     }
-
     function showModal(msg) {
       el('modalText').innerHTML = msg.replace(/\n\n/g, '<br><br>');
       el('modal').classList.add('active');
     }
-
     function closeModal(id = 'modal') {
       el(id).classList.remove('active');
     }
-
     function showResetModal() {
       el('resetModal').classList.add('active');
     }
-
     function resetAll() {
-      state = {name:'', dob:null, age:null, last:null, cycle:28, periodLen:5, months:[], visibleIndex:0, pcodChance:null, pcodSymptoms:[]};
-      ['name','dob','last','cycle','periodLen'].forEach(id => el(id).value = id==='cycle'?28:id==='periodLen'?5:'');
+      state = {name:'', dob:null, age:null, last:null, cycle:28, periodLen:5, sigma:2, months:[], visibleIndex:0, pcodChance:null, pcodSymptoms:[]};
+      ['name','dob','last','cycle','periodLen','variability'].forEach(id => el(id).value = id==='cycle'?28:id==='periodLen'?5:id==='variability'?2:'');
       el('pcod-form').reset();
       el('calendarGrid').innerHTML = '';
       closeModal('resetModal');
       showStep(1);
     }
-
     function skipInfo() { state.name = state.dob = state.age = null; showStep(2); }
-
     function nextToStep2() {
       const name = el('name').value.trim();
       if (!name) return showModal('Please enter your name — a short nickname is fine.');
@@ -307,12 +297,10 @@ SOFTWARE.
       }
       showStep(2);
     }
-
     function nextToPCOD() {
       nextToStep2(); // reuse validation
       showStep('pcod');
     }
-
     function checkPCOD() {
       const checked = document.querySelectorAll('#pcod-form input:checked');
       state.pcodSymptoms = Array.from(checked).map(c => c.nextElementSibling.textContent);
@@ -326,7 +314,6 @@ SOFTWARE.
       state.pcodChance = chance;
       showModal(msg);
     }
-
     function calculateAge(dob) {
       const today = new Date();
       let age = today.getFullYear() - dob.getFullYear();
@@ -334,27 +321,28 @@ SOFTWARE.
       if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
       return age;
     }
-
-    function getDayType(targetDate, lastPeriodDate, cycleLength, periodLength) {
+    function getDayDetails(targetDate, lastPeriodDate, cycleLength, periodLength, sigma) {
       const daysSinceLast = Math.floor((targetDate - lastPeriodDate) / (24*60*60*1000));
-      if (daysSinceLast < 0) return 'past';
-      const dayInCycle = daysSinceLast % cycleLength;
-
-      if (dayInCycle < periodLength) return 'period';
-
-      const ovulationDay = cycleLength - 14;
-      const fertileStart = ovulationDay - 5;
-      const fertileEnd = ovulationDay + 1;
-
-      if (dayInCycle >= fertileStart && dayInCycle <= fertileEnd) {
-        return 'high-desire'; // High Desire = fertile window
-      }
-
-      if (dayInCycle >= fertileStart && dayInCycle <= fertileEnd) return 'fertile'; // kept for completeness, but overridden by high-desire above
-
-      return 'normal';
+      if (daysSinceLast < 0) return { type: 'past', phase: 'unknown', pov: 0, fertility: 'low' };
+      let dayInCycle = daysSinceLast % cycleLength;
+      if (dayInCycle < 0) dayInCycle += cycleLength;
+      const ovulationCenter = cycleLength - 14;
+      const delta = 1.5;
+      const pov = Math.exp( - Math.pow(dayInCycle - ovulationCenter, 2) / (2 * Math.pow(sigma + delta, 2)) );
+      let fertility = 'low';
+      if (pov > 0.6) fertility = 'high';
+      else if (pov > 0.25) fertility = 'medium';
+      let phase = 'luteal';
+      if (dayInCycle < periodLength) phase = 'menstrual';
+      else if (dayInCycle < ovulationCenter) phase = 'follicular';
+      else if (Math.abs(dayInCycle - ovulationCenter) < 1) phase = 'ovulation';
+      else phase = 'luteal';
+      let type = 'normal';
+      if (phase === 'menstrual') type = 'period';
+      else if (fertility === 'high') type = 'high-desire';
+      else if (fertility === 'medium') type = 'fertile';
+      return { type, phase, pov, fertility };
     }
-
     function generateMonthsAhead(count = 12) {
       state.months = [];
       const base = new Date(state.last.getFullYear(), state.last.getMonth(), 1);
@@ -364,33 +352,30 @@ SOFTWARE.
         const monthObj = { month: monthDate.getMonth(), year: monthDate.getFullYear(), days: [] };
         for (let d = 1; d <= daysInMonth; d++) {
           const date = new Date(monthDate.getFullYear(), monthDate.getMonth(), d);
-          const type = getDayType(date, state.last, state.cycle, state.periodLen);
-          monthObj.days.push({ date, type });
+          const details = getDayDetails(date, state.last, state.cycle, state.periodLen, state.sigma);
+          monthObj.days.push({ date, ...details });
         }
         state.months.push(monthObj);
       }
     }
-
     function renderMonth(index) {
       if (index < 0 || index >= 12) return;
       const month = state.months[index];
       el('monthTitle').innerText = `${['January','February','March','April','May','June','July','August','September','October','November','December'][month.month]} ${month.year}`;
       el('visible-month').innerText = `${index + 1}/12`;
-
       const nextPeriod = new Date(state.last);
       nextPeriod.setDate(nextPeriod.getDate() + state.cycle);
       el('greeting').innerHTML = `Hi ${state.name || 'there'}!<br><small>Next period around: ${nextPeriod.toLocaleDateString(undefined, {weekday:'long', year:'numeric', month:'long', day:'numeric'})}</small>`;
-
       let note = '';
       if (state.age) note += `Age: ${state.age}`;
       if (state.pcodChance) note += (note ? ' • ' : '') + `PCOD chance: ${state.pcodChance.charAt(0).toUpperCase() + state.pcodChance.slice(1)}`;
       el('age-note').innerText = note;
-
+      const confidence = 1 - state.sigma / state.cycle;
+      el('confidence-note').innerText = `Cycle confidence: ${Math.round(confidence * 100)}% (based on variability)`;
       const grid = el('calendarGrid');
       grid.innerHTML = '';
       const firstDay = new Date(month.year, month.month, 1).getDay();
       const totalCells = Math.ceil((firstDay + month.days.length) / 7) * 7;
-
       for (let i = 0; i < totalCells; i++) {
         const cell = document.createElement('div');
         cell.className = 'cell';
@@ -402,15 +387,15 @@ SOFTWARE.
           const day = month.days[i - firstDay];
           const dateStr = day.date.toLocaleDateString();
           cell.innerHTML = `<div class="daynum">${day.date.getDate()}</div>`;
-          let badgeText = '', tooltipText = '';
+          let badgeText = '', tooltipText = `Phase: ${day.phase.charAt(0).toUpperCase() + day.phase.slice(1)} • Ovulation likelihood: ${Math.round(day.pov * 100)}% • Fertility: ${day.fertility.charAt(0).toUpperCase() + day.fertility.slice(1)} • ${dateStr}`;
           if (day.type === 'period') {
-            badgeText = 'Period'; tooltipText = `Period day • ${dateStr}`;
+            badgeText = 'Period';
             cell.innerHTML += `<div class="badge period">${badgeText}</div>`;
           } else if (day.type === 'high-desire') {
-            badgeText = 'High Desire ✨'; tooltipText = `Peak libido & intimacy • Higher desire, arousal & sensitivity • ${dateStr}`;
+            badgeText = 'High Fertility & Desire ✨';
             cell.innerHTML += `<div class="badge high-desire">${badgeText}</div>`;
           } else if (day.type === 'fertile') {
-            badgeText = 'Fertile'; tooltipText = `Fertile window • ${dateStr}`;
+            badgeText = 'Medium Fertility';
             cell.innerHTML += `<div class="badge fertile">${badgeText}</div>`;
           }
           if (tooltipText) {
@@ -423,11 +408,11 @@ SOFTWARE.
         grid.appendChild(cell);
       }
     }
-
     function createCalendar() {
       const lastVal = el('last').value;
       const cycle = parseInt(el('cycle').value, 10);
       const periodLen = parseInt(el('periodLen').value, 10);
+      const sigma = parseInt(el('variability').value, 10) || 2;
       if (!lastVal || isNaN(cycle) || cycle < 15 || cycle > 45 || isNaN(periodLen) || periodLen < 3 || periodLen > 10 || new Date(lastVal) > new Date()) {
         showModal('Please check your inputs: valid last period date, cycle 15–45 days, period 3–10 days.');
         return;
@@ -435,28 +420,25 @@ SOFTWARE.
       state.last = new Date(lastVal);
       state.cycle = cycle;
       state.periodLen = periodLen;
+      state.sigma = sigma;
       generateMonthsAhead(12);
       state.visibleIndex = 0;
       renderMonth(0);
       showStep(3);
     }
-
     el('prevBtn').onclick = () => { state.visibleIndex = Math.max(0, state.visibleIndex - 1); renderMonth(state.visibleIndex); };
     el('nextBtn').onclick = () => { state.visibleIndex = Math.min(11, state.visibleIndex + 1); renderMonth(state.visibleIndex); };
-
     function toggleTheme() {
       const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
       document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
       localStorage.setItem('theme', isDark ? 'light' : 'dark');
     }
-
     (function() {
       document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
       const today = new Date().toISOString().split('T')[0];
       el('dob').max = today; el('last').max = today;
       el('name').focus();
     })();
-
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') {
         if (el('modal').classList.contains('active')) closeModal();
