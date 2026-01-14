@@ -1,18 +1,14 @@
 <!--
 MIT License
-
 Copyright (c) 2025 Alwin
-
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
-
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -85,13 +81,42 @@ SOFTWARE.
     .modal{position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.45);display:flex;justify-content:center;
     align-items:center;z-index:60;display:none;}
     .modal.active{display:flex;}
-    .modal .box{background:var(--card);padding:18px;border-radius:12px;max-width:420px;box-shadow:0 10px 40px rgba(0,0,0,0.18);width:90%;}
+    .modal .box{background:var(--card);padding:18px;border-radius:12px;max-width:480px;box-shadow:0 10px 40px rgba(0,0,0,0.18);width:90%;}
     footer{margin-top:16px;font-size:13px;color:var(--muted);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
     .theme-toggle{font-size:12px;cursor:pointer;color:var(--pink);}
     .checkbox-field{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
     .checkbox-field input[type="checkbox"]{width:18px;height:18px;accent-color:var(--pink);}
     a.github-link,a.portfolio-link{color:var(--pink);text-decoration:none;font-weight:600;}
     a.github-link:hover,a.portfolio-link:hover{text-decoration:underline;}
+
+    /* New: Confidence info icon */
+    .info-icon {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      line-height: 16px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: bold;
+      background: var(--soft);
+      color: white;
+      border-radius: 50%;
+      margin-left: 6px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s;
+    }
+    .info-icon:hover,
+    .info-icon:focus {
+      background: var(--pink);
+      transform: scale(1.15);
+      box-shadow: 0 0 0 3px rgba(255,107,157,0.2);
+    }
+    .confidence-text {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
   </style>
 </head>
 <body>
@@ -128,6 +153,7 @@ SOFTWARE.
           </div>
         </div>
       </section>
+
       <!-- Step PCOD -->
       <section class="step" id="step-pcod">
         <div class="step-indicator">Step 2 of 4</div>
@@ -152,6 +178,7 @@ SOFTWARE.
           </form>
         </div>
       </section>
+
       <!-- Step 2: Period details -->
       <section class="step" id="step-2">
         <div class="step-indicator">Step 3 of 4</div>
@@ -180,6 +207,7 @@ SOFTWARE.
           </div>
         </div>
       </section>
+
       <!-- Step 3: Calendar -->
       <section class="step" id="step-3">
         <div class="step-indicator">Step 4 of 4</div>
@@ -195,33 +223,40 @@ SOFTWARE.
               <div style="font-size:12px;color:var(--muted)">Visible: <span id="visible-month"></span></div>
             </div>
           </div>
+
           <div class="month-nav">
             <button class="btn-ghost" id="prevBtn">←</button>
             <div class="month-title" id="monthTitle">Month</div>
             <button class="btn-ghost" id="nextBtn">→</button>
           </div>
+
           <div class="grid" id="weekdayLabels">
             <div class="weekday-label">Sun</div><div class="weekday-label">Mon</div><div class="weekday-label">Tue</div>
             <div class="weekday-label">Wed</div><div class="weekday-label">Thu</div><div class="weekday-label">Fri</div>
             <div class="weekday-label">Sat</div>
           </div>
+
           <div class="grid" id="calendarGrid" role="grid"></div>
+
           <div class="legend">
             <div style="display:flex;align-items:center;gap:8px"><div class="box period" style="background:var(--pink)"></div> Period</div>
             <div style="display:flex;align-items:center;gap:8px"><div class="box fertile" style="background:var(--mint)"></div> Medium Fertility</div>
             <div style="display:flex;align-items:center;gap:8px"><div class="box high-desire" style="background:var(--purple)"></div> High Fertility & Desire ✨</div>
           </div>
+
           <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
             <button class="btn-ghost" onclick="showStep(2)">Update</button>
             <button class="btn-primary" onclick="showResetModal()">Start Over</button>
           </div>
         </div>
+
         <p style="margin-top:8px;font-size:13px;color:var(--muted)">
           ⚠️ Predictions are estimates based on the standard rhythm method. High Fertility & Desire marks peak days (around ovulation) when many experience higher desire, arousal & easier intimacy due to hormones — individual results vary. Not medical advice.
           <a href="https://github.com/alwin-m/ROS-Cycle-Project" class="github-link" target="_blank" rel="noopener">Contribute on GitHub</a>
         </p>
       </section>
     </main>
+
     <footer>
       <div style="font-size:12px;color:var(--muted)">
         Open-source • MIT License • <a href="https://github.com/alwin-m/ROS-Cycle-Project" class="github-link" target="_blank" rel="noopener">GitHub</a> •
@@ -233,31 +268,35 @@ SOFTWARE.
       </div>
     </footer>
   </div>
+
   <!-- Modals -->
   <div class="modal" id="modal">
     <div class="box">
       <div id="modalText" role="alert"></div>
-      <div style="text-align:right;margin-top:12px;display:flex;gap:10px;justify-content:flex-end">
-        <button class="btn-ghost" onclick="closeModal()">OK</button>
-        <button class="btn-primary" onclick="closeModal()">Close</button>
+      <div style="text-align:right;margin-top:16px">
+        <button class="btn-primary" onclick="closeModal()">Got it ♡</button>
       </div>
     </div>
   </div>
+
   <div class="modal" id="resetModal">
     <div class="box">
-      <div>Start over? This will clear the current session.</div>
-      <div style="text-align:right;margin-top:12px">
+      <div>Start over? This will clear the current session~</div>
+      <div style="text-align:right;margin-top:16px">
         <button class="btn-ghost" onclick="closeModal('resetModal')">Cancel</button>
-        <button class="btn-primary" onclick="resetAll()">Confirm</button>
+        <button class="btn-primary" onclick="resetAll()">Yes, start fresh</button>
       </div>
     </div>
   </div>
+
   <script>
     let state = {
       name: '', dob: null, age: null, last: null, cycle: 28, periodLen: 5, sigma: 2,
-      months: [], visibleIndex: 0, pcodChance: null, pcodSymptoms: []
+      months: [], visibleIndex: 0, pcodChance: null, pcodSymptoms: [], confidence: 0.85
     };
+
     const el = id => document.getElementById(id);
+
     function showStep(n) {
       document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
       if (typeof n === 'string') el('step-' + n).classList.add('active');
@@ -265,55 +304,68 @@ SOFTWARE.
       const first = (typeof n === 'string' ? el('step-' + n) : el('step-' + n)).querySelector('input, button');
       if (first) first.focus();
     }
+
     function showModal(msg) {
       el('modalText').innerHTML = msg.replace(/\n\n/g, '<br><br>');
       el('modal').classList.add('active');
     }
+
     function closeModal(id = 'modal') {
       el(id).classList.remove('active');
     }
+
     function showResetModal() {
       el('resetModal').classList.add('active');
     }
+
     function resetAll() {
-      state = {name:'', dob:null, age:null, last:null, cycle:28, periodLen:5, sigma:2, months:[], visibleIndex:0, pcodChance:null, pcodSymptoms:[]};
-      ['name','dob','last','cycle','periodLen','variability'].forEach(id => el(id).value = id==='cycle'?28:id==='periodLen'?5:id==='variability'?2:'');
-      el('pcod-form').reset();
+      state = {name:'', dob:null, age:null, last:null, cycle:28, periodLen:5, sigma:2, months:[], visibleIndex:0, pcodChance:null, pcodSymptoms:[], confidence:0.85};
+      ['name','dob','last','cycle','periodLen','variability'].forEach(id => {
+        if (el(id)) el(id).value = id==='cycle'?28:id==='periodLen'?5:id==='variability'?2:'';
+      });
+      el('pcod-form')?.reset();
       el('calendarGrid').innerHTML = '';
       closeModal('resetModal');
       showStep(1);
     }
+
     function skipInfo() { state.name = state.dob = state.age = null; showStep(2); }
+
     function nextToStep2() {
       const name = el('name').value.trim();
-      if (!name) return showModal('Please enter your name — a short nickname is fine.');
+      if (!name) return showModal('Please enter your name — a short nickname is fine~');
       state.name = name;
       const dob = el('dob').value;
       if (dob) {
         const parsed = new Date(dob);
         const age = calculateAge(parsed);
-        if (age < 9 || age > 55) showModal(`Age appears to be ${age} — outside typical range (9–55). Proceed if correct.`);
+        if (age < 9 || age > 55) showModal(`Hmm~ Age ${age} seems a bit unusual (typical range 9–55). Still okay?`);
         state.dob = parsed; state.age = age;
       }
       showStep(2);
     }
+
     function nextToPCOD() {
-      nextToStep2(); // reuse validation
+      nextToStep2();
       showStep('pcod');
     }
+
     function checkPCOD() {
       const checked = document.querySelectorAll('#pcod-form input:checked');
       state.pcodSymptoms = Array.from(checked).map(c => c.nextElementSibling.textContent);
       const count = checked.length;
       let chance = 'low', msg = '';
-      if (count <= 2) msg = 'Low chance of PCOD.';
-      else if (count <= 5) { chance = 'medium'; msg = 'Medium chance — consider consulting a doctor.'; }
-      else { chance = 'high'; msg = 'High chance — please see a doctor for proper diagnosis.<br><br>⚠️ PCOD may cause irregular cycles, affecting prediction accuracy.'; }
-      if (state.pcodSymptoms.length) msg += `<br><br><strong>Symptoms:</strong><ul style="margin:8px 0;padding-left:20px">${state.pcodSymptoms.map(s=>`<li>${s}</li>`).join('')}</ul>`;
-      msg += '<br><br>This is <strong>not</strong> a diagnosis.';
+      if (count <= 2) msg = 'Looks pretty low chance of PCOD~';
+      else if (count <= 5) { chance = 'medium'; msg = 'Medium chance… maybe worth chatting with a doctor soon ♡'; }
+      else { chance = 'high'; msg = 'Higher chance — best to see a doctor for a proper check.<br><br>PCOD can make cycles more unpredictable.'; }
+      if (state.pcodSymptoms.length) {
+        msg += `<br><br><strong>Symptoms you selected:</strong><ul style="margin:8px 0;padding-left:20px">${state.pcodSymptoms.map(s=>`<li>${s}</li>`).join('')}</ul>`;
+      }
+      msg += '<br><br>This is <strong>not</strong> a medical diagnosis, okay?';
       state.pcodChance = chance;
       showModal(msg);
     }
+
     function calculateAge(dob) {
       const today = new Date();
       let age = today.getFullYear() - dob.getFullYear();
@@ -321,6 +373,7 @@ SOFTWARE.
       if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
       return age;
     }
+
     function getDayDetails(targetDate, lastPeriodDate, cycleLength, periodLength, sigma) {
       const daysSinceLast = Math.floor((targetDate - lastPeriodDate) / (24*60*60*1000));
       if (daysSinceLast < 0) return { type: 'past', phase: 'unknown', pov: 0, fertility: 'low' };
@@ -343,6 +396,7 @@ SOFTWARE.
       else if (fertility === 'medium') type = 'fertile';
       return { type, phase, pov, fertility };
     }
+
     function generateMonthsAhead(count = 12) {
       state.months = [];
       const base = new Date(state.last.getFullYear(), state.last.getMonth(), 1);
@@ -358,24 +412,44 @@ SOFTWARE.
         state.months.push(monthObj);
       }
     }
+
+    function calculateConfidence() {
+      // More gentle curve — regular cycles get very high confidence
+      const baseConfidence = 1 - (state.sigma / (state.cycle * 0.65));
+      const pcodPenalty = state.pcodChance === 'high' ? 0.22 : state.pcodChance === 'medium' ? 0.12 : 0;
+      state.confidence = Math.max(0.48, baseConfidence - pcodPenalty);
+    }
+
     function renderMonth(index) {
       if (index < 0 || index >= 12) return;
       const month = state.months[index];
       el('monthTitle').innerText = `${['January','February','March','April','May','June','July','August','September','October','November','December'][month.month]} ${month.year}`;
       el('visible-month').innerText = `${index + 1}/12`;
+
       const nextPeriod = new Date(state.last);
       nextPeriod.setDate(nextPeriod.getDate() + state.cycle);
-      el('greeting').innerHTML = `Hi ${state.name || 'there'}!<br><small>Next period around: ${nextPeriod.toLocaleDateString(undefined, {weekday:'long', year:'numeric', month:'long', day:'numeric'})}</small>`;
+      el('greeting').innerHTML = `Hi ${state.name || 'there'}! ♡<br><small>Next period probably around: ${nextPeriod.toLocaleDateString(undefined, {weekday:'long', year:'numeric', month:'long', day:'numeric'})}</small>`;
+
       let note = '';
       if (state.age) note += `Age: ${state.age}`;
       if (state.pcodChance) note += (note ? ' • ' : '') + `PCOD chance: ${state.pcodChance.charAt(0).toUpperCase() + state.pcodChance.slice(1)}`;
       el('age-note').innerText = note;
-      const confidence = 1 - state.sigma / state.cycle;
-      el('confidence-note').innerText = `Cycle confidence: ${Math.round(confidence * 100)}% (based on variability)`;
+
+      const confPercent = Math.round(state.confidence * 100);
+      let confColor = confPercent >= 85 ? '#4CAF50' : confPercent >= 70 ? '#9C27B0' : '#FF7043';
+      el('confidence-note').innerHTML = `
+        <div class="confidence-text">
+          Cycle confidence: <strong style="color:${confColor}">${confPercent}%</strong>
+          <span class="info-icon" onclick="showConfidenceInfo()" tabindex="0" role="button" aria-label="Learn about cycle confidence">?</span>
+          <span style="font-size:11px;">(based on your regularity)</span>
+        </div>
+      `;
+      
       const grid = el('calendarGrid');
       grid.innerHTML = '';
       const firstDay = new Date(month.year, month.month, 1).getDay();
       const totalCells = Math.ceil((firstDay + month.days.length) / 7) * 7;
+
       for (let i = 0; i < totalCells; i++) {
         const cell = document.createElement('div');
         cell.className = 'cell';
@@ -408,37 +482,83 @@ SOFTWARE.
         grid.appendChild(cell);
       }
     }
+
+    function showConfidenceInfo() {
+      const conf = Math.round(state.confidence * 100);
+      let msg = `
+        <strong>Cycle confidence: ${conf}%</strong><br><br>
+
+        This little percentage shows how much we can trust the predictions~ ♡<br><br>
+
+        <strong>Very high (85–98%)</strong><br>
+        • Your cycles are super regular<br>
+        • Very little variation (±1–2 days)<br>
+        • Usually no PCOD symptoms<br><br>
+
+        <strong>Good (70–84%)</strong><br>
+        • Normal natural variation (±3–4 days)<br>
+        • Sometimes a bit irregular<br>
+        • Maybe light PCOD influence<br><br>
+
+        <strong>Moderate/Lower (below 70%)</strong><br>
+        • Bigger variation (±5+ days)<br>
+        • Often irregular or missed periods<br>
+        • Medium or high PCOD chance<br><br>
+
+        The more consistent your body is… the more accurate our gentle guesses become~ 🌸
+      `;
+      showModal(msg);
+    }
+
     function createCalendar() {
       const lastVal = el('last').value;
       const cycle = parseInt(el('cycle').value, 10);
       const periodLen = parseInt(el('periodLen').value, 10);
       const sigma = parseInt(el('variability').value, 10) || 2;
-      if (!lastVal || isNaN(cycle) || cycle < 15 || cycle > 45 || isNaN(periodLen) || periodLen < 3 || periodLen > 10 || new Date(lastVal) > new Date()) {
-        showModal('Please check your inputs: valid last period date, cycle 15–45 days, period 3–10 days.');
+
+      if (!lastVal || isNaN(cycle) || cycle < 15 || cycle > 45 || 
+          isNaN(periodLen) || periodLen < 3 || periodLen > 10 || 
+          new Date(lastVal) > new Date()) {
+        showModal('Please check your inputs~<br>• Valid last period date (not future)<br>• Cycle 15–45 days<br>• Period 3–10 days');
         return;
       }
+
       state.last = new Date(lastVal);
       state.cycle = cycle;
       state.periodLen = periodLen;
       state.sigma = sigma;
+
+      calculateConfidence();
       generateMonthsAhead(12);
       state.visibleIndex = 0;
       renderMonth(0);
       showStep(3);
     }
-    el('prevBtn').onclick = () => { state.visibleIndex = Math.max(0, state.visibleIndex - 1); renderMonth(state.visibleIndex); };
-    el('nextBtn').onclick = () => { state.visibleIndex = Math.min(11, state.visibleIndex + 1); renderMonth(state.visibleIndex); };
+
+    el('prevBtn').onclick = () => { 
+      state.visibleIndex = Math.max(0, state.visibleIndex - 1); 
+      renderMonth(state.visibleIndex); 
+    };
+
+    el('nextBtn').onclick = () => { 
+      state.visibleIndex = Math.min(11, state.visibleIndex + 1); 
+      renderMonth(state.visibleIndex); 
+    };
+
     function toggleTheme() {
       const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
       document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
       localStorage.setItem('theme', isDark ? 'light' : 'dark');
     }
-    (function() {
+
+    (function init() {
       document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
       const today = new Date().toISOString().split('T')[0];
-      el('dob').max = today; el('last').max = today;
+      el('dob').max = today; 
+      el('last').max = today;
       el('name').focus();
     })();
+    
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') {
         if (el('modal').classList.contains('active')) closeModal();
