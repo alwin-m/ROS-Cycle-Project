@@ -1,253 +1,226 @@
-# ROS Cycle: Open-Source Menstrual Cycle Tracker
+<div align="center">
 
-## Overview
+<img src="https://github.com/user-attachments/assets/5d7d8465-d727-4325-9b2e-3f415cb45589" width="120" alt="ROS Cycle Logo" />
 
-ROS Cycle is an open-source, privacy-first menstrual cycle tracker that runs **entirely on the user’s device**. It is designed to provide **transparent, mathematically grounded cycle predictions** without collecting, transmitting, or storing personal health data on external servers.
+# 🌸 ROS Cycle
 
-Unlike many commercial trackers, ROS Cycle does **not claim certainty**. Instead, it models the menstrual cycle using **deterministic rules combined with explicit uncertainty**, presenting predictions as **probability-informed insights rather than guarantees**.
+### Free Period Tracker & Menstrual Cycle Calendar
 
-ROS Cycle is suitable for students, privacy-conscious users, and developers interested in explainable health algorithms.
+**Track Your Cycle — Privately, Transparently, and on Your Terms**
 
----
+[![License: MIT](https://img.shields.io/badge/License-MIT-rose.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+[![Open Source](https://img.shields.io/badge/Open%20Source-Yes-brightgreen?style=flat-square)](https://github.com/)
+[![Privacy First](https://img.shields.io/badge/Privacy-First-blueviolet?style=flat-square)](#)
+[![No Cloud](https://img.shields.io/badge/Cloud-None-red?style=flat-square)](#)
+[![Platform](https://img.shields.io/badge/Platform-Web%20%7C%20Local-blue?style=flat-square)](#)
 
-## Why ROS Cycle Exists
-
-Most menstrual tracking applications rely on opaque algorithms and centralized data storage. ROS Cycle was created to demonstrate an alternative approach:
-
-* **Privacy by architecture**: All computation is local. No accounts, no cloud, no telemetry.
-* **Explainable mathematics**: Every prediction is derived from visible formulas.
-* **Educational clarity**: Users and contributors can understand how predictions are generated.
-* **Ethical restraint**: The system avoids medical claims or hidden inference.
-
-ROS Cycle is a tracker, not a diagnostic tool.
+[✨ Features](#-features) · [📐 How It Works](#-how-it-works) · [🚀 Getting Started](#-getting-started) · [🛡️ Privacy](#️-privacy-first-by-design) · [🤝 Contribute](#-contributing)
 
 ---
 
-## Core User Inputs
+</div>
 
-ROS Cycle intentionally limits inputs to what is mathematically defensible in a local-only system.
+## 🌺 What is ROS Cycle?
 
-Required inputs:
+**ROS Cycle** is an open-source, privacy-first menstrual cycle tracker that runs **entirely on your device**. No accounts. No cloud. No telemetry. Just honest, math-backed predictions you can actually understand.
 
-1. **Last Menstrual Period start date**
-   ( D_0 )
+Unlike commercial trackers that hide their logic behind black-box algorithms, ROS Cycle is built on **transparent, explainable mathematics** — so you always know *how* and *why* a prediction is made.
 
-2. **Average cycle length (days)**
-   ( \mu_C ), typically between 15 and 45 days
-
-Optional inputs:
-
-3. **Estimated cycle variability (± days)**
-   ( \sigma_C )
-
-4. **Average period length (days)**
-   ( P ), typically between 3 and 10 days
-
-These parameters define the entire prediction model.
+> **ROS Cycle is a tracker, not a diagnostic tool.** Predictions are estimates based on your inputs, not medical advice.
 
 ---
 
-## Mathematical Model
+## ✨ Features
 
-ROS Cycle uses a **two-layer model**:
-
-1. A deterministic baseline to anchor the calendar
-2. A probabilistic layer to represent biological uncertainty
-
-No learning occurs unless the user explicitly updates inputs.
-
----
-
-## 1. Cycle Day Index (Deterministic Core)
-
-For any calendar date ( D_n ), the cycle day index is:
-
-[
-\text{CycleDay}(D_n) = (D_n - D_0) \bmod \mu_C
-]
-
-**How it works:**
-
-* Converts absolute dates into a repeating cycle index
-* Anchors all phase calculations
-
-**Input → Output:**
-
-* Input: calendar date
-* Output: cycle-relative day number
-
-**Question answered:**
-
-> Where does this date fall within the current cycle?
+| Feature | Description |
+|---|---|
+| 🗓️ **12-Month Calendar View** | See your entire predicted cycle year at a glance |
+| 🌡️ **Probabilistic Fertile Windows** | Gradient fertility bands instead of misleading binary labels |
+| 🎯 **Ovulation Likelihood Peaks** | Gaussian-modeled peak estimates with uncertainty baked in |
+| 📊 **Confidence Indicators** | Know how reliable your predictions are, based on your cycle stability |
+| 📄 **Exportable PDF Reports** | Generate and save reports — fully local, never uploaded |
+| 🩺 **PCOD Symptom Checklist** | Optional, non-diagnostic symptom awareness tool |
+| 🔒 **100% On-Device** | Zero data transmission. Always. |
 
 ---
 
-## 2. Baseline Phase Boundaries
+## 📐 How It Works
 
-Using biological averages, ROS Cycle defines reference phase regions:
+ROS Cycle uses a **two-layer mathematical model**: a deterministic core anchored to your cycle data, layered with probabilistic reasoning to represent real biological uncertainty.
 
-* **Menstrual phase**: ( 0 \le d < P )
-* **Follicular phase**: ( P \le d < (\mu_C - 14) )
-* **Ovulation center**: ( d = (\mu_C - 14) )
-* **Luteal phase**: ( (\mu_C - 14) < d < \mu_C )
+### Inputs
 
-**How it works:**
-
-* Establishes a non-probabilistic biological scaffold
-
-**Outcome:**
-
-* A phase label for each cycle day
-
-**Question answered:**
-
-> What phase is this day closest to, assuming a typical cycle?
+| Input | Symbol | Required |
+|---|---|---|
+| Last Menstrual Period start date | `D₀` | ✅ Yes |
+| Average cycle length (days) | `μ_C` | ✅ Yes |
+| Estimated cycle variability (± days) | `σ_C` | Optional |
+| Average period length (days) | `P` | Optional |
 
 ---
 
-## 3. Probabilistic Ovulation Model
+### 1. 🔢 Cycle Day Index
 
-Ovulation timing is uncertain even in regular cycles. ROS Cycle models this uncertainty using a Gaussian distribution:
+For any calendar date `Dₙ`, the cycle-relative day is:
 
-[
-P_{ov}(d) = \exp\left( -\frac{(d - (\mu_C - 14))^2}{2(\sigma_C + \delta)^2} \right)
-]
+```
+CycleDay(Dₙ) = (Dₙ − D₀) mod μ_C
+```
 
-Where:
-
-* ( d ) = cycle day index
-* ( \sigma_C ) = user-estimated variability
-* ( \delta \approx 1–2 ) days (biological noise)
-
-**How it works:**
-
-* Centers likelihood around the expected ovulation day
-* Smoothly decreases confidence farther from the center
-
-**Output:**
-
-* Relative ovulation likelihood per cycle day (0–1)
-
-**Question answered:**
-
-> How plausible is ovulation on this day, given uncertainty?
+Converts any absolute date into a repeating cycle position, anchoring all phase calculations.
 
 ---
 
-## 4. Fertility Probability Bands
+### 2. 🌿 Phase Boundaries
 
-Rather than binary fertile / non-fertile labeling, ROS Cycle defines probability bands:
-
-* **High fertility**: ( P_{ov}(d) > 0.6 )
-* **Medium fertility**: ( 0.25 < P_{ov}(d) \le 0.6 )
-* **Low fertility**: ( P_{ov}(d) \le 0.25 )
-
-**How it works:**
-
-* Maps ovulation probability to fertility relevance
-
-**Outcome:**
-
-* Gradient-based fertility visualization
-
-**Question answered:**
-
-> How biologically favorable is this day for conception?
+| Phase | Range |
+|---|---|
+| 🔴 Menstrual | `0 ≤ d < P` |
+| 🟡 Follicular | `P ≤ d < (μ_C − 14)` |
+| 🟢 Ovulation Center | `d = (μ_C − 14)` |
+| 🔵 Luteal | `(μ_C − 14) < d < μ_C` |
 
 ---
 
-## 5. Confidence Estimation
+### 3. 📈 Probabilistic Ovulation Model
 
-ROS Cycle displays a confidence score derived from cycle variability:
+Ovulation is never certain. ROS Cycle models it with a Gaussian distribution:
 
-[
-\text{Confidence} = 1 - \frac{\sigma_C}{\mu_C}
-]
+```
+P_ov(d) = exp( −(d − (μ_C − 14))² / 2(σ_C + δ)² )
+```
 
-Values are clamped to the interval ([0,1]).
-
-**How it works:**
-
-* Larger variability reduces confidence
-* Shorter, stable cycles increase confidence
-
-**Outcome:**
-
-* Qualitative confidence indicator (Low / Medium / High)
-
-**Question answered:**
-
-> How reliable are these predictions, given cycle stability?
+- `δ ≈ 1–2 days` of biological noise is always included
+- Confidence smoothly decreases the further a day is from the expected ovulation center
+- Output: a likelihood value between **0 and 1** per cycle day
 
 ---
 
-## What ROS Cycle Does *Not* Do
+### 4. 🌈 Fertility Probability Bands
 
-* No medical diagnosis
-* No hormone inference
-* No behavioral tracking
-* No background learning
-* No cloud-based analytics
+| Band | Condition |
+|---|---|
+| 🔴 High Fertility | `P_ov(d) > 0.6` |
+| 🟠 Medium Fertility | `0.25 < P_ov(d) ≤ 0.6` |
+| 🟢 Low Fertility | `P_ov(d) ≤ 0.25` |
 
-All predictions are conditional on user-provided inputs.
-
----
-
-## PCOD Symptom Checker (Non-Diagnostic)
-
-ROS Cycle includes an optional checklist for common PCOD-related symptoms. The output:
-
-* Summarizes symptom count
-* Encourages medical consultation when appropriate
-* Explicitly avoids diagnosis
-
-This component does **not** influence cycle predictions.
+No false certainty. Just gradients that reflect reality.
 
 ---
 
-## Output Summary
+### 5. 🧮 Confidence Score
 
-ROS Cycle generates:
+```
+Confidence = 1 − (σ_C / μ_C)    [clamped to 0–1]
+```
 
-* A 12-month calendar view
-* Probability-informed fertile windows
-* Ovulation likelihood peaks
-* Confidence indicators
-* Exportable PDF reports (local only)
-
----
-
-## Ethical & Technical Guarantees
-
-* Fully client-side execution
-* Transparent formulas
-* No data transmission
-* MIT-licensed open-source code
-* Predictable, auditable behavior
+| Confidence | Meaning |
+|---|---|
+| High | Short, stable, predictable cycle |
+| Medium | Some variability present |
+| Low | High variability — predictions less reliable |
 
 ---
 
-## Contribution Philosophy
+## 🚀 Getting Started
 
-Contributions are welcome, especially those that:
+```bash
+# Clone the repository
+git clone https://github.com/YOUR_USERNAME/ros-cycle.git
 
-* Improve explainability
-* Enhance accessibility
-* Extend visualization clarity
-* Preserve privacy-first design
+# Navigate into the project
+cd ros-cycle
 
-Feature proposals that require cloud storage or opaque inference will be carefully reviewed.
+# Install dependencies
+npm install
+
+# Start the app locally
+npm start
+```
+
+> ⚡ Everything runs in your browser or on your machine. No backend, no server, no sign-up.
 
 ---
 
-## Disclaimer
+## 🛡️ Privacy First by Design
 
-ROS Cycle is an educational and informational tool. Menstrual cycles are influenced by stress, illness, hormonal conditions, and lifestyle factors. Predictions are estimates and may vary. Always consult a qualified healthcare professional for medical concerns.
+ROS Cycle was built around a core principle: **your health data belongs to you, and only you.**
+
+- ✅ All computation is **local-only**
+- ✅ **No accounts** required
+- ✅ **No cloud storage**, no sync, no telemetry
+- ✅ **No behavioral tracking** or background learning
+- ✅ Fully **auditable open-source code**
+- ✅ Predictable, **deterministic outputs** given the same inputs
 
 ---
 
-## License
+## 🩺 PCOD Symptom Checker
 
+ROS Cycle includes an optional symptom awareness checklist for common PCOD-related symptoms.
+
+- Summarizes symptom count
+- Encourages you to speak with a healthcare professional when appropriate
+- **Does not** influence cycle predictions
+- **Does not** perform any diagnosis
+
+---
+
+## 📤 Output Summary
+
+- 🗓️ 12-month cycle calendar
+- 🎯 Probability-informed fertile windows
+- 📈 Ovulation likelihood peaks
+- 📉 Cycle confidence indicators
+- 📄 Local-only exportable PDF reports
+
+---
+
+## 🤝 Contributing
+
+Contributions are warmly welcome! We especially value work that:
+
+- 💡 Improves **explainability** of predictions
+- ♿ Enhances **accessibility**
+- 📊 Extends **visualization clarity**
+- 🔒 Preserves the **privacy-first** architecture
+
+### How to Contribute
+
+```bash
+# Fork the repo, then:
+git checkout -b feature/your-feature-name
+git commit -m "feat: describe your change"
+git push origin feature/your-feature-name
+# Open a Pull Request 🎉
+```
+
+> ⚠️ Feature proposals requiring cloud storage or opaque inference models will be carefully reviewed to ensure they align with ROS Cycle's core values.
+
+---
+
+## ⚠️ Disclaimer
+
+ROS Cycle is an **educational and informational tool**. Menstrual cycles are influenced by stress, illness, hormonal conditions, medications, and lifestyle factors. All predictions are **estimates** and may vary significantly.
+
+**Always consult a qualified healthcare professional for medical concerns.**
+
+---
+
+## 📄 License
+
+```
 MIT License — free to use, modify, and distribute.
+```
 
-![ROS Cycle Logo](https://github.com/user-attachments/assets/5d7d8465-d727-4325-9b2e-3f415cb45589)
+See [`LICENSE`](./LICENSE) for full terms.
+
+---
+
+<div align="center">
+
+Made with 🌸 for privacy, transparency, and cycle awareness.
+
+**ROS Cycle — because your data should stay yours.**
+
+</div>
